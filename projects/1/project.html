@@ -26,58 +26,80 @@
                             </ol>
                         </nav>
 
-                        <h2 class="py-4" id="full-title">Lorem Ipsum: Aliquam sodales</h2>
+                        <h2 class="py-2" id="full-title">Lorem Ipsum: Aliquam sodales</h2>
 
-                        <div>
-                            <p class="text-justify">
-                                L'interprétabilité des modèles prédictifs d'apprentissage automatique est cruciale pour de nombreux contextes applicatifs qui exigent que les décisions faites par les modèles soient comprises par les utilisateurs finaux (e.g. domaines critiques ou sensibles). Elle est aussi d’importance majeure afin d’implémenter des interactions Humain-IA de qualité, dans lesquelles l’Homme comprend la machine et s’enrichit de ses interactions avec elle. De nombreux travaux portent ainsi sur ces aspects d’interprétabilité, en lien étroit avec les problématiques de Confiance de l’IA, domaine considéré comme stratégique par la France dans son positionnement en IA.
-                            </p>
-                            <p class="text-justify">
-                                Dans nos travaux sur ce sujet, l’interprétabilité des modèles d’apprentissage machine a été étudiée sous l'angle de l'explicabilité locale et des méthodes d'attribution. Celles-ci se concentrent sur l'explication d'une décision spécifique prise par un modèle pour une entrée donnée, en évaluant la contribution des caractéristiques de l'entrée aux résultats, par exemple la probabilité attribuée à une classe.  
-                            </p>
-                            <p class="text-justify">
-                                De nombreuses méthodes d'attribution reposent sur une formulation du problème d'attribution basée sur la théorie des jeux et sur une approximation de la célèbre valeur de Shapley. Le calcul de l’indice de Shapley est cependant quadratique par rapport au nombre de caractéristiques de l’entrée, souvent comptées en milliers dans les applications récentes. 
-                            </p>
-                            <p class="text-justify">
-                                Nos contributions portent sur la proposition de nouvelles approches efficaces. Dans l'article “Fair and Efficient Alternatives to Shapley-based Attribution Methods”, Charles Condevaux, Sébastien Harispe, Stéphane Mussard, publié à ECML PKDD 2022 avec nos collègues de l’équipe CHROME de l’Université de Nîmes, nous présentons la méthode d'attribution FESP (Fair-Efficient-Symmetric-Perturbation), une approche alternative partageant des propriétés axiomatiques pertinentes avec la valeur de Shapley et la valeur Equal Surplus (ES) couramment appliquée dans les jeux coopératifs. Nos résultats montrent que FESP et ES produisent de meilleures cartes d'attribution que les approches de l'état de l’art de 2022 dans le cadre de la classification d'images et de textes. 
-                            </p>
-                            <p class="text-justify">
-                                Une implémentation de l’approche est partagée librement et gratuitement sur GitHub ; celle-ci permet l’utilisation des approches FESP et ES avec des modèles de Scikit-learn, ou encore implémentés en Pytorch ou via la librairie Transformers (Huggingface). 
+                        <div class="text-body-secondary fst-italic">
+                            <b>Fair and Efficient Alternatives to Shapley-based Attribution Methods</b> <br>
+                            Charles Condevaux (1) , Sébastien Harispe (2) , Stéphane Mussard (1) <br>
+                            1 CHROME - Détection, évaluation, gestion des risques CHROniques et éMErgents / Université de Nîmes <br>
+                            2 Euromov DHM - EuroMov - Digital Health in Motion <br>
+                            <a href="https://imt-mines-ales.hal.science/hal-03781033">https://imt-mines-ales.hal.science/hal-03781033</a>
+                        </div>
 
-                                En réponse à un manque identifié dans la littérature, nous proposons par ailleurs dans ce papier une approche d’évaluation innovante pour l’évaluation des méthodes d’interprétabilité locale à base d’attribution. L’ensemble des expérimentations effectuées sont de plus reproductibles.
-                            </p>
-                            <p class="text-justify">
-                                Lien GitHub : <a href="https://github.com/ccdv-ai/fesp_es">Lien vers Github.</a>
-                            </p>
+                        <div class="pt-4">
+                            <div class="row justify-content-center" style="gap:2%">
+                                <img src="images/7.png" class="img-thumbnail img-fluid rounded col-2"  alt="...">
+                                <img src="images/8.png" class="img-thumbnail img-fluid rounded col-4"  alt="...">
+                                <img src="images/9.png" class="img-thumbnail img-fluid rounded col-4" alt="...">
+                            </div>
+                        </div>
 
-                            <img src="images/1.png" class="img-fluid rounded py-3" alt="...">
+                        <div class="pt-4">
+                            <h4>Contexte</h4>
 
                             <p class="text-justify">
-                                Exemple de résultats d’attribution (top 10%) proposés par différentes approches dans le cas d’un classifieur binaire (classe chien/chat). Nous proposons la méthode Equal Surplus et FESP.  
+                                L'interprétabilité des modèles prédictifs d'apprentissage automatique est cruciale pour de nombreux contextes applicatifs qui exigent que les décisions prises par les modèles soient comprises par les utilisateurs finaux (e.g. domaines critiques ou sensibles). Elle est aussi d’importance majeure afin d’implémenter des interactions Humain-IA de qualité, dans lesquelles l’opérateur humain comprend la machine et s’enrichit de ses interactions avec elle. De nombreux travaux portent ainsi sur ces aspects d’interprétabilité, en lien étroit avec les problématiques de Confiance de l’IA, domaine considéré comme stratégique par la France dans son positionnement en IA (cf. France 2030 : stratégie nationale pour l'intelligence artificielle).
+                            </p>
+                            <p class="text-justify">
+                                L’interprétabilité des modèles d’apprentissage machine est fréquemment étudiée dans la littérature sous l'angle de l'explicabilité locale et de la définition de méthodes dites d'attribution. Celles-ci se concentrent sur l'explication d'une décision spécifique prise par un modèle pour une entrée donnée. Elles évaluent pour cela la contribution aux résultats du modèle prédictif - e.g., la probabilité attribuée à une classe - des caractéristiques de l'entrée qu’il traite, e.g. quantification du rôle joué par les pixels d’une image dans le cas d’une classification d’images. Ces approches d’attribution reposaient largement dans la littérature de 2022 sur une formulation du problème d'attribution basée sur la théorie des jeux et sur une approximation de la célèbre valeur de Shapley. Cette valeur est jugée pertinente dans le contexte d’attribution du fait de ses propriétés axiomatiques. Son calcul exact est cependant de complexité quadratique par rapport au nombre de caractéristiques de l’entrée, souvent comptées en milliers dans les applications récentes en apprentissage profond notamment ; cette limite a amené l’étude d’approximations mettant regrettablement à mal le respect des fondements axiomatiques motivant l’utilisation initiale de la valeur de Shapley. 
                             </p>
 
-                            <img src="images/2.png" class="img-fluid rounded py-3" alt="...">
+                            <h4>Contribution</h4>
 
                             <p class="text-justify">
-                                Exemple de résultats d’attribution générés par les approches proposées et différentes approches de l’état de l’art. Les images composites ne contiennent qu’une zone contenant un chat ou un chien (la seule censée être détectée par l’approche). Contrairement à de nombreuses approches, ES et FESP arrivent à identifier les zones d’intérêt dans de nombreux cas.  
+                                Notre contribution porte sur la proposition de nouvelles approches d'explicabilité locale à base d’attribution, efficaces et fondées axiomatiquement. Dans l'article “Fair and Efficient Alternatives to Shapley-based Attribution Methods”, Charles Condevaux, Sébastien Harispe, Stéphane Mussard, publié à ECML PKDD 2022 avec nos collègues de l’équipe CHROME de l’Université de Nîmes, nous présentons en particulier la méthode d'attribution FESP (Fair-Efficient-Symmetric-Perturbation), une approche alternative à celles existantes partageant des propriétés axiomatiques pertinentes avec la valeur de Shapley. Nous évaluons aussi l’attribution amenée par la valeur Equal Surplus (ES) couramment appliquée dans les jeux coopératifs mais jusque-là non évaluée pour l’attribution dans des contextes d’interprétabilité en Apprentissage Machine. Ces approches expriment des propriétés souhaitées dans le contexte de l’attribution (e.g. deux caractéristiques contribuant de manière égale auront un même score d’attribution), et leur calcul est de complexité réduite par rapport à la complexité induite par le calcul de la valeur de Shapley. Nos résultats montrent que malgré ces réductions notables de complexité, FESP et ES produisent de meilleures cartes d'attribution que les approches de l'état de l’art de 2022 dans le cadre de la classification d'images et de textes.
                             </p>
-                            <div class="d-flex justify-content-center py-3" style="gap:20px">
+
+                            <h4>Impact</h4>
+
+                            <p class="text-justify">
+                                Un résultat important de cette contribution est que des méthodes d’attribution efficaces et fondées axiomatiquement peuvent être formulées au-delà de celles reposant sur la valeur de Shapley. Différentes contributions ont par la suite par ailleurs souligné les limites de la valeur de Shapley dans certains contextes. Les approches proposées sont par ailleurs agnostiques au modèle considéré, et peuvent par conséquent être utilisées avec tout type de modèle, a contrario de certaines approches d’interprétabilité définies pour des classes de modèles particuliers.
+                            </p>
+                            <p class="text-justify">
+                                En réponse à un manque identifié dans la littérature, nous proposons aussi dans ce papier une approche d’évaluation innovante pour l’évaluation des méthodes d’interprétabilité locale à base d’attribution. La littérature motivait en effet nombreuses de ses propositions dans le domaine en se concentrant sur les propriétés algorithmiques ou axiomatiques des approches introduites, indépendamment - étonnamment - de leur performance en termes d’interprétabilité. Les approches d’évaluation innovantes que nous avons proposées sont selon nous intéressantes pour la communauté intéressée par le sujet. L’ensemble des expérimentations effectuées sont par ailleurs reproductibles. 
+                            </p>
+                            <p class="text-justify">
+                                Une implémentation Python des approche FESP et ES est partagée librement et gratuitement sur <a href="https://github.com/ccdv-ai/fesp_es">Github</a> ; celle-ci permet l’utilisation de ces approches avec des modèles de Scikit-learn, ou encore implémentés en Pytorch ou via la librairie Transformers (Huggingface). Ces développements ont été réalisés par Charles Condevaux.
+                            </p>
+
+                            <img src="images/1.png" class="img-thumbnail img-fluid rounded" alt="...">
+
+                            <p class="text-justify pt-3">
+                                Exemple de résultats d’attribution (top 10%) proposés par différentes approches dans le cas d’un classifieur binaire (classe chien/chat). Nous proposons les méthodes Equal Surplus et FESP.
+                            </p>
+
+                            <img src="images/2.png" class="img-thumbnail img-fluid rounded" alt="...">
+
+                            <p class="text-justify pt-3">
+                                Exemple de résultats d’attribution produits par les approches proposées et différentes approches de l’état de l’art. Les images composites ne contiennent qu’une zone contenant un chat ou un chien (la seule censée être détectée par l’approche). Contrairement à de nombreuses approches, ES et FESP arrivent à identifier les zones d’intérêt dans de nombreux cas.
+                            </p>
+                            <div class="d-flex justify-content-center" style="gap:20px">
                                 <img src="images/6.gif" class="img-fluid w-100 h-auto rounded"  alt="...">
                                 <img src="images/5.gif" class="img-fluid w-100 h-auto rounded" alt="...">                         
                             </div>
                         </div>
                         
-                        <div id="carouselExampleIndicators" class="carousel carousel-dark slide">
+                        <div id="carouselExampleIndicators" class="carousel carousel-dark slide pt-3">
                             <div class="carousel-indicators">
                                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
                             </div>
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <img src="images/3.png" class="d-block w-100" alt="...">
+                                    <img src="images/3.png" class="img-thumbnail d-block w-100 rounded" alt="...">
                                 </div>
                                 <div class="carousel-item">
-                                    <img src="images/4.png" class="d-block w-100" alt="...">
+                                    <img src="images/4.png" class="img-thumbnail d-block w-100 rounded" alt="...">
                                 </div>                                  
                             </div>
                             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -96,8 +118,7 @@
         </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <script>
         const myCarouselElement = document.querySelector('#carouselExampleIndicators')

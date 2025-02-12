@@ -36,15 +36,15 @@ const PROJECTS = [
         "IA Explicable : proposition d'alternatives efficaces à l’indice de Shapley",
         'IA Explicable',
         'projects/1/images/1.png',
-        ['Charles Condevaux', 'Sébastien Harispe', 'Stéphane Mussard'],
+        ['Sébastien Harispe', 'Charles Condevaux', 'Stéphane Mussard'],
         'projects/1/project.html'
     ),
     new Project(
-        'In hac habitasse platea dictumst: Integer id sollicitudin nunc',
-        'IA Explicable',
-        'https://picsum.photos/id/20/640/360',
-        ['Harispe S.'],
-        'projects/project_test/boilerplate.html'
+        'Symposium international IEEE/ACM sur la simulation distribuée et les applications en temps réel',
+        'Symposium international IEEE/ACM',
+        'projects/2/images/1.png',
+        ['Gregory Zacharewicz'],
+        'projects/2/project.html'
     ),
     new Project(
         'Duis leo sem, commodo id aliquet vitae, auctor vel ligula',
