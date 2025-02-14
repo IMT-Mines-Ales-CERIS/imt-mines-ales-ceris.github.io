@@ -19,7 +19,13 @@ class Project {
     get pageLink() { return this._pageLink; }
 
     FirstAuthorEtAl() {
-        return this._authors.length > 0 ? `${this._authors[0]} et al.`: '';
+        if (this._authors.length == 1) {
+            return this._authors[0];
+        }
+        if (this._authors.length > 1) {
+            return `${this._authors[0]} et al.`;
+        }
+        return ''
     }
 
     FillPage() {
@@ -33,7 +39,7 @@ class Project {
 /** @type Array<Project> */
 const PROJECTS = [
     new Project(
-        "IA Explicable : proposition d'alternatives efficaces à l’indice de Shapley",
+        "IA Explicable : proposition d'alternatives efficaces à l'indice de Shapley",
         'IA Explicable',
         'projects/1/images/1.png',
         ['Sébastien Harispe', 'Charles Condevaux', 'Stéphane Mussard'],
@@ -42,29 +48,29 @@ const PROJECTS = [
     new Project(
         'Symposium international IEEE/ACM sur la simulation distribuée et les applications en temps réel',
         'Symposium international IEEE/ACM',
-        'projects/2/images/1.png',
+        'projects/2/images/3.png',
         ['Gregory Zacharewicz'],
         'projects/2/project.html'
     ),
     new Project(
-        'Duis leo sem, commodo id aliquet vitae, auctor vel ligula',
-        'IA Explicable',
-        'https://picsum.photos/id/30/640/360',
-        ['Daclin N.'],
-        'projects/project_test/boilerplate.html'
+        'Bug ou pas : telle est la question !',
+        'Bug ou pas : telle est la question !',
+        'projects/3/images/1.png',
+        ['Quentin Perez', 'Pierre-Antoine Jean', 'Christelle Urtado', 'Sylvain Vauttier'],
+        'projects/3/project.html'
     ),
     new Project(
-        'Curabitur blandit',
-        'IA Explicable',
-        'https://picsum.photos/id/40/640/360',
-        ['Xu B.'],
-        'projects/project_test/boilerplate.html'
+        "Les Chaires du CERIS depuis 2019 jusqu'en 2030",
+        'Les Chaires du CERIS',
+        'projects/4/images/1.png',
+        ['Vincent Chapurlat'],
+        'projects/4/project.html'
     ),
     new Project(
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
         'IA Explicable',
         'https://picsum.photos/id/50/640/360',
-        ['Urtado C.'],
+        ['Rick Monk'],
         'projects/project_test/boilerplate.html'
     )
 ];
