@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Portfolio - CERIS</title>
+
+    <link href="../../css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <main>
+        <section class="py-3 text-center container" id="header"></section>
+
+        <div class="py-3 bg-body-tertiary">
+            <div class="container-sm">                
+                <div class="row">
+                    <div class="col-md-12 mx-auto">
+                        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="../../index.html">Accueil</a></li>
+                              <li class="breadcrumb-item active" aria-current="page" id="short-title">Project name</li>
+                            </ol>
+                        </nav>
+
+                        <h2 class="py-4" id="full-title">Lorem Ipsum: Aliquam sodales</h2>
+
+                        <div class="text-body-secondary fst-italic">
+                            <b>Cautious classification based on belief functions theory and imprecise relabelling</b> <br>
+                            Imoussaten, A., & Jacquin, L. (2022) <br>
+                            International Journal of Approximate Reasoning, 142, pp.130-146. DOI: 10.1016/j.ijar.2021.11.009 <br>
+                            <a href="https://imt-mines-ales.hal.science/hal-03472031">https://imt-mines-ales.hal.science/hal-03472031</a>
+                        </div>
+
+                        <div class="pt-4">
+                            <h4>Contexte</h4>
+                            <p class="text-justify">
+                                Cet article a été publié à la fin de la thèse de doctorat de Lucie Kunitomo-Jacquin comme une synthèse de ses travaux sur le tri prudent de déchets plastiques issus d'équipements électriques et électroniques (DEEE) mis au rebut dans le contexte de données incertaines (lièe au contexte de tri en environnement industriel : technologie utilisée, qualité des plastiques, etc.). Cet article étend cette recherche contextualisée dans le cadre de la thèse au cas général de tout problème de classification supervisée où les données sont affectées par l'incertitude.  
+                            </p>
+                            <p class="text-justify">
+                                Les performances de classifieurs standard, c'est-à-dire toute méthode de classification qui attribue nécessairement une étiquette unique, diminuent lorsqu’ils sont confrontés à des données imparfaites. Dans certains domaines sensibles où ces imperfections sont présentes, les classifieurs doivent être adaptés afin d'éviter toute erreur de classification compte tenu des conséquences graves qu’elles pourraient engendrer, par exemple dans les applications médicales. Cet article tente de fournir des techniques de classification prudentes, en particulier avec le concept de classification imprécise, où la sortie du classifieur peut être un sous-ensemble de classes dès lors que ce sous-ensemble permet de garantir la fiabilité de la décision au détriment d’une précision trop risquée. 
+                            </p>
+                            <p class="text-justify">
+                                Dans le cas du tri des plastiques, l'objectif est d'optimiser le recyclage des plastiques. Comme les plastiques d'une même famille sont très difficiles à séparer après leur altération au cours du temps, l'idée de la classification imprécise est d'introduire des conteneurs supplémentaires dédiés aux familles de plastiques (et non plus seulement à un plastique particulier). Le décideur a alors la possibilité de trouver preneur pour ces conteneurs réputés mixtes, soit d’effectuer des investigations plus approfondies (mais aussi plus onéreuses) sur ceux-ci afin d’en séparer les éléments (voir figure 1). Une autre alternative de la classification prudente consiste à quantifier l’incertitude afin d’estimer dynamiquement les impuretés ajoutées aux conteneurs et cumulées à la suite des erreurs précédentes. Le recyclage se fera alors en fonction des proportions d’impuretés estimées dans les conteneurs (voir figure 2). La première option est traitée dans cet article et dans les articles [1,2,5]. La seconde option est abordée dans les articles [3,4].
+                            </p>
+
+                            <div class="text-center pt-3">
+                                <img src="images/1.png" class="img-thumbnail img-fluid rounded"  alt="...">
+                                <p class="pt-2">Figure 1 : Introduction de bacs mixtes et classification imprécise</p>
+                            </div>
+
+                            <div class="text-center pt-3">
+                                <img src="images/2.png" class="img-thumbnail img-fluid rounded"  alt="...">
+                                <p class="pt-2">Figure 2 : Quantification de l’incertitude pour une estimation dynamique des taux d’impuretés</p>
+                            </div>
+
+                            <h4>Contribution</h4>
+                            <p class="text-justify">
+                                La particularité de notre proposition de classification imprécise est qu'elle tient compte du fait que, dans certaines applications, l'imperfection des données ne se limite pas à la qualité des nouveaux échantillons à classer, mais peut également affecter les données d'apprentissage. Nous proposons donc une procédure de réétiquetage qui permet d'identifier les échantillons imparfaits dans les données d'apprentissage et de les réétiqueter avec un sous-ensemble approprié de classes candidates. Cette approche de la classification imprécise est proche, à certains égards, de la classification hiérarchique où un « parent » peut être considéré comme un sous-ensemble de classes qui ne sont autres que les « enfants » qu’il subsume. La figure 3 explique la tâche de réétiquetage sur des données générées. Comme le montre la Figure 3, il s’agit d’identifier des zones d’ignorance (incertitude épistémique) et des zones de chevauchement (incertitude aléatoire) et les réétiqueter en conséquence. 
+                            </p>
+
+                            <div class="text-center pt-3">
+                                <img src="images/3.png" class="img-thumbnail img-fluid rounded"  alt="...">
+                                <p class="pt-2">Figure 3: traitement des données d’apprentissage ambiguës par réétiquetage</p>
+                            </div>
+
+                            <p class="text-justify">
+                                En outre, le cadre des fonctions de croyance est désigné pour représenter l'incertitude et l'imprécision concernant la classe d'un nouvel échantillon dont les éléments focaux sont dans l’ensemble des nouvelles étiquettes des données d'apprentissage. Un critère basé sur la généralisation du score Fβ est défini pour décider quel sous-ensemble de classes doit être associé au nouvel échantillon. Plusieurs options sont présentées afin de construire notre classifieur pour la procédure de réétiquetage comme pour l'étape de décision. La Figure 4 présente l'architecture du classifieur ECLAIR (Evidential CLAssification of Incomplete data via Imprecise Relabelling) proposé. 
+                            </p>
+                            
+                            <div class="text-center pt-3">
+                                <img src="images/4.png" class="img-thumbnail img-fluid rounded"  alt="...">
+                                <p class="pt-2">Figure 4: Principe du classifieur ÉCLAIR</p>
+                            </div>
+
+                            <p class="text-justify">
+                                Plusieurs comparaisons ont été réalisées avec les classifieurs imprécis les plus performants. D'abord sur des données générées aléatoirement, puis sur 11 ensembles de données de l'UCI (https://archive.ics.uci.edu/), sur la base de cinq mesures des performances de classification imprécise. Elles montrent que notre classifieur atteint des performances proches, voire supérieures, aux meilleurs classifieurs sur les cinq mesures.
+                            </p>
+
+                            <h4 class="py-3">Impact</h4>
+                            
+                            <ul>
+                                <li>   La thèse de Lucie Kunitomo-Jacquin a permis d’apporter des réponses opérationnelles au projet Mélanie labellisé par les pôles de compétitivité Optitec et Axelera. En 2021, destiné à apporter des solutions pour le tri et le recyclage des déchets plastiques d’équipements électriques et électroniques (DEEE), le projet de recherche « Mélanie » s’est vu octroyé le 1er Prix FIEEC Carnot, qui récompense chaque année un projet de recherche ayant mené à un réel impact économique.</li>
+                                <li>Grâce à nos propositions concrètes et l’implémentation efficace de nos algorithmes ce travail a su également s’imposer dans le domaine d’application de la thèse de Lucie Kunitomo-Jacquin. L’article [2] a été accueilli positivement dans la revue Resources, Conservation & Recycling d’Elsevier qui accueille des contributions de recherche portant sur la gestion durable et la conservation des ressources. La revue met l'accent sur les processus de transformation impliqués dans la transition vers des systèmes de production et de consommation plus durables.</li>
+                                <li>Le projet ENFIELD (European Lighthouse to Manifest Trustworthy and Green AI) dans lequel l’IMT est partie prenante vise la création d’un centre d’excellence en intelligence artificielle (IA) autour des piliers : l’IA adaptative, verte, centrée sur l’humain et digne de confiance. Les travaux de cet article et des articles connexes nous permettent de nous placer sur le pilier de l’IA digne de confiance.</li>
+                                <li>Ces travaux nous ont également permis de nous rapprocher du GT Explicon du GDR RADIA (Raisonnement, Apprentissage, et Décision en Intelligence Artificielle). Afin de pouvoir certifier la fiabilité des systèmes IA et pouvoir les déployer en confiance, il est en effet souvent nécessaire soit de pouvoir expliquer leur fonctionnement, soit de pouvoir garantir (statistiquement ou de manière déterministe) la justesse de leur prédiction dans un domaine de fonctionnement donné.</li>                                
+                                <li>Ces travaux ont permis d’initier depuis juin 2024 une collaboration commune entre l’Heudiyasic (UTC, Compiègne, France), LIP6 (Sorbonne université, Paris, France), National Institute of Advanced Industrial Science and Technology (AIST, Tokyo, Japan), EuroMov DHM (IMT Mines Alès, Alès, Franc).</li>
+                                <li>Enfin, ces travaux sont aujourd’hui poursuivis à travers les thèses Classstroke de V. De Sousa, et Code IA de T. Dupuy, avec des applications respectivement dans le domaine de la santé et du sport élite.</li>
+                            </ul>
+
+                            <h4 class="py-3">Références</h4>
+
+                            <p>
+                                Plus d’informations peuvent être trouvées dans les articles connexes suivants :</p>
+                            </p>
+                            <ul>
+                                <li>
+                                    [1] Abdelhak Imoussaten. “The study of the hyper-parameter modelling the decision rule of the cautious classifiers based on the Fbeta measure”. In : Array 19 (2023), p. 100-310.
+                                    <ul>
+                                        <li><a href="https://www.sciencedirect.com/science/article/pii/S2590005623000358">https://www.sciencedirect.com/science/article/pii/S2590005623000358</a></li>
+                                        <li><a href="https://imt-mines-ales.hal.science/hal-04171138">https://imt-mines-ales.hal.science/hal-04171138</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    [2] Lucie Jacquin, Abdelhak Imoussaten, François Trousset, Didier Perrin et Jacky Montmain. “Control of waste fragment sorting process based on MIR imaging coupled with cautious classification”. In : Resources, Conservation and Recycling 168 (2021), p. 105258. 
+                                    <ul>
+                                        <li><a href="https://www.sciencedirect.com/science/article/pii/S0921344920305735">https://www.sciencedirect.com/science/article/pii/S0921344920305735</a></li>
+                                        <li><a href="https://hal.science/hal-03019787v1">https://hal.science/hal-03019787v1</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    [3] Lucie Jacquin, Abdelhak Imoussaten et Sébastien Destercke. “Handling Mixture Optimisation Problem Using Cautious Predictions and Belief Functions”. In : IPMU. Springer. 2020, p. 394-407. 
+                                    <ul>
+                                        <li><a href="https://hal.science/hal-02872104v1">https://hal.science/hal-02872104v1</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    [4] Lucie Jacquin, Abdelhak Imoussaten, Sébastien Destercke, François Trousset, Jacky Montmain et Didier Perrin. “Manipulating focal sets on the unit simplex : application to plastic sorting”. In : FUZZ 2020-IEEE International Conference on Fuzzy Systems. 2020.  
+                                    <ul>
+                                        <li><a href="https://hal.science/hal-02529955v1">https://hal.science/hal-02529955v1</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    [5] Jacquin, L. (2021). Traitement de données incertaines: application au tri des matières plastiques (Doctoral dissertation, IMT Mines Alès).
+                                    <ul>
+                                        <li><a href="https://hal.science/tel-04076948">https://hal.science/tel-04076948</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script src="../../js/header.js"></script>
+    <script src="../../js/project.js"></script>
+    <script>
+        PROJECTS[4].FillPage();
+    </script>
+
+</body>
+
+</html>

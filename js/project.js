@@ -67,10 +67,10 @@ const PROJECTS = [
         'projects/4/project.html'
     ),
     new Project(
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-        'IA Explicable',
-        'https://picsum.photos/id/50/640/360',
-        ['Rick Monk'],
-        'projects/project_test/boilerplate.html'
+        'Classification prudente basée sur la théorie des fonctions de croyance et réétiquetage imprécis',
+        'Classification prudente et réétiquetage imprécis',
+        'projects/5/images/2.png',
+        ['Abdelhak Imoussaten', 'Lucie Jacquin'],
+        'projects/5/project.html'
     )
 ];
