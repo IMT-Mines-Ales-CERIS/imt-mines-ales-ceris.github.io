@@ -60,7 +60,7 @@ const PROJECTS = [
         'projects/3/project.html'
     ),
     new Project(
-        "Les Chaires du CERIS depuis 2019 jusqu'en 2030",
+        "Les Chaires du CERIS (2019 - 2030)",
         'Les Chaires du CERIS',
         'projects/4/images/1.png',
         ['Vincent Chapurlat'],
