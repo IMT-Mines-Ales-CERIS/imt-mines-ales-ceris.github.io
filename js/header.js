@@ -10,8 +10,8 @@
                 <img src="${imagePath}" class="img-fluid" alt="...">
             </div>
             <div class="col-lg">
-                <h1 class="fw-light">Portfolio du CERIS</h1>
-                <p class="lead text-body-secondary">Centre d’Enseignement et de Recherche en Informatique et Systèmes</p>
+                <h1 class="fw-light">Portfolio SyCoIA</h1>
+                <p class="lead text-body-secondary">Systèmes Complexes et Intelligence Artificielle</p>
             </div>
         </div>`;
     let headerTag = document.querySelector('#header');
