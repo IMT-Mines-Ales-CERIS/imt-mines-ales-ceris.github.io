@@ -62,7 +62,7 @@ const PROJECTS = [
     new Project(
         "Les Chaires du CERIS (2019 - 2030)",
         'Les Chaires du CERIS',
-        'projects/4/images/1.png',
+        'projects/4/images/9.png',
         ['Vincent Chapurlat'],
         'projects/4/project.html'
     ),
