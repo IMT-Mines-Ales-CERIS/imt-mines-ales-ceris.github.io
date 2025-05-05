@@ -30,9 +30,13 @@ class Project {
 
     FillPage() {
         let shortTitleTag = document.querySelector('#short-title');
-        shortTitleTag.textContent = this._shortTitle;
+        if (shortTitleTag) {
+            shortTitleTag.textContent = this._shortTitle;
+        }
         let fullTitleTag = document.querySelector('#full-title');
-        fullTitleTag.textContent = this._title;
+        if (fullTitleTag) {
+            fullTitleTag.textContent = this._title;
+        }
     }
 }
 
