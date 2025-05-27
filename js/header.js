@@ -8,13 +8,15 @@
     let tagContent = `
         <div class="bg-image-index padding-image-index">
             <div class="container d-flex flex-column">
-                <div class="col-lg">
-                    <h1 class="fw-light">Portfolio SyCoIA</h1>
-                    <p class="lead text-body-light">Systèmes Complexes et Intelligence Artificielle</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="me-4">
+                        <h1 class="fw-light">Portfolio SyCoIA</h1>
+                        <p class="lead m-0">Systèmes Complexes et Intelligence Artificielle</p>
+                    </div>
+                    <img src="${imageSycoiaPath}" class="img-fluid" style="border-radius:50%; width: 8%" alt="...">
                 </div>
                 <div id="logo" class="mt-4">
                     <img src="${imagePath}" class="img-fluid me-4" style="width: 20%" alt="...">
-                    <img src="${imageSycoiaPath}" class="img-fluid" style="border-radius:50%; width: 20%" alt="...">
                 </div>
             </div>
         </div>`;
