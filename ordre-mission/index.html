@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande d'OM</title>
+    <link href="ordre-mission/style.css" rel="stylesheet">
+    <script src="ordre-mission/js/nodes.js"></script>
+</head>
+<body>
+    <form class="needs-validation">
+        <div class="printable">
+            <h1 class="text-center"><b>Demande d'OM</b></h1>
+            <h4 class="text-secondary text-center pb-2 border-bottom">À compléter et à retourner à l'assistante concernée</h4>
+
+            <div class="mt-4">
+                <div class="input-group has-validation">
+                    <span class="input-group-text">Nom et prénom</span>
+                    <input type="text" aria-label="First name" class="form-control" placeholder="Nom" required>
+                    <input type="text" aria-label="Last name" class="form-control" placeholder="Prénom" required>
+                </div>
+            </div>
+
+            <div class="h4 pb-2 mt-4 text-primary border-bottom border-primary">
+                Service bénéficiaire
+            </div>
+
+            <div class="form-check form-switch mt-3">
+                <input class="form-check-input" type="checkbox" role="switch" id="free-charge">
+                <label class="form-check-label" for="free-charge">Sans frais</label>
+            </div>
+
+            <div class="mt-3">
+                <div id="service-selection" class="custom-grid"></div>
+                <div id="service-details" class="base-flex-column mt-2"></div>
+            </div>
+
+            <div class="h4 pb-2 mt-3 text-primary border-bottom border-primary">
+                Information générale
+            </div>
+
+            <div class="mt-3">
+                <div class="form-floating">
+                    <textarea class="form-control" required></textarea>
+                    <label>Motif du déplacement</label>
+                </div>
+                <div class="form-floating mt-1">
+                    <input type="text" class="form-control" required>
+                    <label>Lieu du déplacement</label>
+                </div>
+                <div class="badge text-bg-secondary w-25 mt-2">
+                    Départ
+                </div>
+                <div class="input-group mt-1">
+                    <span class="input-group-text w-25">Date de départ</span>
+                    <input type="date" class="form-control" aria-label="Date de départ" required>
+                </div>
+                <div class="input-group mt-1">
+                    <span class="input-group-text w-25">Heure de départ</span>
+                    <input type="time" class="form-control" aria-label="Heure de départ" required>
+                </div>
+                <div class="input-group mt-1">
+                    <span class="input-group-text w-25">Ville de départ</span>
+                    <input type="text" class="form-control" aria-label="Ville de départ" required>
+                </div>
+                <div class="badge text-bg-secondary w-25 mt-1">
+                    Retour
+                </div>
+                <div class="input-group mt-1">
+                    <span class="input-group-text w-25">Date de retour</span>
+                    <input type="date" class="form-control" aria-label="Date de retour" required>
+                </div>
+                <div class="input-group mt-1">
+                    <span class="input-group-text w-25">Heure de retour</span>
+                    <input type="time" class="form-control" aria-label="Heure de départ" required>
+                </div>
+                <div class="input-group mt-1">
+                    <span class="input-group-text w-25">Ville de retour</span>
+                    <input type="text" class="form-control" aria-label="Ville de retour" required>
+                </div>
+            </div>
+
+            <div class="h4 pb-2 mt-4 text-primary border-bottom border-primary">
+                Transport
+            </div>            
+            
+            <div>
+                <!-- <div class="form-check form-switch mt-3">
+                    <input class="form-check-input" type="checkbox" role="switch" id="transport-switch">
+                    <label class="form-check-label" for="transport-switch">Transport</label>
+                </div> -->
+
+                <div id="transport-content">
+                <!-- <div> -->
+                    <div class="mt-3 p-3 bg-info bg-opacity-10 border border-info rounded cacher-impression">
+                        <div class="text-justify">
+                            <b>Exemple d'usage</b> : Vous devez prendre le train pour vous rendre à Nîmes depuis Alès. Dans le formulaire, commencez par renseigner un premier transport. Indiquez le moyen de transport («Train»), votre ville de départ (Alès), la date et l'heure de départ, ainsi que la ville d'arrivée (Nîmes) avec la date et l'heure correspondantes. Ensuite, ajoutez un second transport en cliquant sur le bouton vert (Ajouter un transport) pour renseigner votre trajet retour. Cette fois, indiquez Nîmes comme ville de départ (avec la date et l'heure de départ) et Alès comme ville d'arrivée (avec la date et l'heure d'arrivée).
+                        </div>
+                        <div class="mt-2 text-center">
+                            <b>Vous devez renseigner individuellement chacun de vos transports (les allers comme les retours).</b>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="transport-base">
+                            <div class="d-flex align-items-end justify-content-between">
+                                <div class="badge text-bg-secondary w-75 mt-3">
+                                    Transport #1
+                                </div>
+                                <button type="button" id="btn-minus" class="badge text-bg-danger float-end border border-0 invisible" title="Supprimer le transport">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                                        <path fill-rule="evenodd" d="M5.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H6a.5.5 0 0 1-.5-.5"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div id="transport-selection" class="mt-1"></div>
+                            <div id="transport-details" class="mt-1"></div>
+
+                            <div class="badge text-bg-secondary w-25 mt-2">
+                                Départ
+                            </div>
+                            <div class="input-group mt-1">
+                                <span class="input-group-text w-25">Lieu de départ</span>
+                                <input type="text" class="form-control" aria-label="Lieu de départ" required>
+                            </div>
+                            <div class="input-group mt-1">
+                                <span class="input-group-text w-25">Date de départ</span>
+                                <input type="date" class="form-control" aria-label="Date de départ" required>
+                            </div>
+                            <div class="input-group mt-1">
+                                <span class="input-group-text w-25">Heure de départ</span>
+                                <input type="time" class="form-control" aria-label="Heure de départ" required>
+                            </div>
+                            <div class="badge text-bg-secondary w-25 mt-1">
+                                Arrivée
+                            </div>
+                            <div class="input-group mt-1">
+                                <span class="input-group-text w-25">Lieu d'arrivée</span>
+                                <input type="text" class="form-control" aria-label="Lieu d'arrivée" required>
+                            </div>
+                            <div class="input-group mt-1">
+                                <span class="input-group-text w-25">Date d'arrivée</span>
+                                <input type="date" class="form-control" aria-label="Date d'arrivée" required>
+                            </div>
+                            <div class="input-group mt-1">
+                                <span class="input-group-text w-25">Heure d'arrivée</span>
+                                <input type="time" class="form-control" aria-label="Heure d'arrivée" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-center">
+                        <button type="button" id="btn-plus" class="btn btn-success cacher-impression w-50" title="Ajouter un transport">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"></path>
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"></path>
+                            </svg>
+                            <span class="ms-2">
+                                Ajouter un transport
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h4 pb-2 mt-4 text-primary border-bottom border-primary">
+                Logistique
+            </div>
+
+            <div class="base-flex-column mt-3">
+                <div class="input-group">
+                    <span class="input-group-text w-25">Hébergement</span>
+                    <select class="form-select" aria-label="Herbergement">
+                        <option value="0">Non</option>
+                        <option value="1">Oui</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text w-25">Repas</span>
+                    <select class="form-select" aria-label="Repas">
+                        <option value="0">Non</option>
+                        <option value="1">Oui</option>
+                    </select>
+                </div>
+
+                <div class="form-floating">
+                    <textarea class="form-control"></textarea>
+                    <label>Commentaire</label>
+                </div>
+            </div>
+        </div>
+            
+        <div class="not-printable">
+            <div class="d-flex">
+                <div class="p-2  w-50">
+                    <button id="verify" class="btn btn-success w-100">Vérifier la conformité</button>
+                </div>
+                <div class="p-2 w-50">
+                    <button id="save" class="btn btn-primary w-100">Enregistrer cette page</button>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="p-3 bg-info bg-opacity-10 border border-info rounded">
+            <div class="h4 pb-2 text-primary border-bottom border-primary">
+                Délais de validation
+            </div>
+            <div class="mt-3">
+                <ul>
+                    <li>7 jours pour mission sans titre de transport ou hôtel</li>
+                    <li>12 jours pour mission avec titres de transport ou hôtel</li>
+                    <li>30 jours minimum pour les missions à l'étranger, avec ou sans demande d'avance sur frais</li>
+                </ul>
+            </div>
+            <div class="h4 pb-2 mt-4 text-primary border-bottom border-primary">
+                Enregistrer l'ordre de mission au format PDF et le retourner à l'assistante concernée
+            </div>
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">Enregistrer cette page</li>
+                    <li class="breadcrumb-item">Enregistrer au format PDF</li>
+                    <li class="breadcrumb-item">Enregistrer</li>
+                </ol>
+            </nav>
+            <div class="text-center mt-3">
+                <img src="ordre-mission/img/save.png" class="rounded border" alt="Information" title="Enregistrer au format pdf">
+            </div>
+        </div>
+    </form>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="verification-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title text-danger fs-5" id="exampleModalLabel">Le formulaire est incomplet, merci de renseigner tous les champs obligatoires</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="ignore-print" class="btn btn-secondary">Ignorer et imprimer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+      
+
+    
+
+    <script src="ordre-mission/js/bootstrap.bundle.min.js"></script>
+
+
+    <script src="ordre-mission/js/functions.js"></script>
+    <script src="ordre-mission/js/index.js"></script>
+</body>
+</html>
