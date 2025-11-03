@@ -79,6 +79,26 @@ body {
 }
 
 
+/* 
+888888b.                              
+888  "88b                             
+888  .88P                             
+8888888K.   8888b.  .d8888b   .d88b.  
+888  "Y88b     "88b 88K      d8P  Y8b 
+888    888 .d888888 "Y8888b. 88888888 
+888   d88P 888  888      X88 Y8b.     
+8888888P"  "Y888888  88888P'  "Y8888  
+*/
+
+.base-radius-16 {
+    border-radius: 16px;
+}
+
+.base-shadow {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+
 /*
 888    888                          
 888    888                          
@@ -209,18 +229,6 @@ transform: scale(1.05);
     /* background-color: #f5f3ee; */
     background: #FFDFE01A;
     background-image: linear-gradient(218deg, #ffdfe01a 48%, #efd9e399);
-}
-
-
-.publication-item {
-    border: 3px solid #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-radius: 16px;
-    border-left: 3px solid var(--primary-text);
-}
-
-.publication-item:hover {
-    border-left-color: var(--vermillion-light);
 }
 
 .btn-gradient {
