@@ -1,0 +1,274 @@
+@font-face {
+    font-family: Inter Variablefont Opsz Wght;
+    src: url(https://cdn.prod.website-files.com/68011fed23249a9699d7b42b/6802eb69f5be53c035b06487_Inter-VariableFont_opsz%2Cwght.ttf)format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap
+}
+
+:root {
+    --primary-background-color: #fcfbfa;
+    --primary-text: #153a43;
+    --primary-text-rgb: 21, 58, 67;
+    --secondary-text: rgba(21, 58, 67, 0.75);
+
+    --vermillion-light: #ff7c4d;
+    --vermillion-light-rgb: 255, 124, 77;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.text-muted {
+    color: var(--secondary-text) !important;
+}
+
+body {
+    background-color: var(--primary-background-color);
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-family: Inter Variablefont Opsz Wght, Arial, sans-serif;
+
+    color: var(--primary-text);
+    background-color: #fff;
+    min-height: 100%;
+
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.nav-item {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.navbar {
+  --bs-navbar-color: rgba(var(--bs-emphasis-color-rgb), 1);
+  --bs-emphasis-color-rgb: var(--primary-text-rgb);
+}
+
+.card {
+    --bs-card-color: var(--primary-text);
+}
+
+.card-title {
+    --bs-card-title-color: var(--primary-text-rgb);
+}
+
+.padding-global {
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+    .padding-global {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+}
+
+.badge-config {
+    color: white;
+    background-color: var(--primary-text);
+}
+
+
+/*
+888    888                          
+888    888                          
+888    888                          
+8888888888  .d88b.  888d888 .d88b.  
+888    888 d8P  Y8b 888P"  d88""88b 
+888    888 88888888 888    888  888 
+888    888 Y8b.     888    Y88..88P 
+888    888  "Y8888  888     "Y88P"  
+*/
+
+.hero {
+  position: relative;
+  height: calc(100vh - 6rem); /* tout le reste de la page après la navbar */
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+.hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* couvre le conteneur sans déformation */
+}
+
+/* Texte intégré à l'image */
+.hero-text {
+    position: absolute;  /* superposé sur l'image */
+    bottom: 2rem;        /* en bas de l'image */
+    color: white;
+
+    column-gap: 6%;
+    row-gap: 6%;
+}
+
+.hero-desc {
+    font-size: 1.25rem;
+}
+
+.hero-title {
+    color: var(--vermillion-light);
+    white-space: nowrap;
+    font-size: clamp(2rem, 14vw, 277.76px);
+    line-height: .75;
+    font-weight: 900;
+}
+
+.dark-gradient {
+    background-image: linear-gradient(#153a4300 55%, #000c);
+    position: absolute;
+    inset: 0%
+}
+
+.noise {
+    opacity: .25;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    background-image: url(https://cdn.prod.website-files.com/68011fed23249a9699d7b42b/6807e0c24176475123a57376_noise-light.png);
+    background-position: 50%;
+    background-size: 220px 220px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0%
+}
+
+@media screen and (max-width: 1200px) {
+    .hero-text {
+        column-gap: 2rem;
+        row-gap: 2rem;
+    }
+}
+
+
+/*
+8888888b.                                                     888                                             
+888   Y88b                                                    888                                             
+888    888                                                    888                                             
+888   d88P .d88b.  .d8888b   .d88b.   8888b.  888d888 .d8888b 88888b.        8888b.  888d888 .d88b.   8888b.  
+8888888P" d8P  Y8b 88K      d8P  Y8b     "88b 888P"  d88P"    888 "88b          "88b 888P"  d8P  Y8b     "88b 
+888 T88b  88888888 "Y8888b. 88888888 .d888888 888    888      888  888      .d888888 888    88888888 .d888888 
+888  T88b Y8b.          X88 Y8b.     888  888 888    Y88b.    888  888      888  888 888    Y8b.     888  888 
+888   T88b "Y8888   88888P'  "Y8888  "Y888888 888     "Y8888P 888  888      "Y888888 888     "Y8888  "Y888888 
+*/
+
+.research-area {
+    border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+}
+
+.feature-icon {
+width: 60px;
+height: 60px;
+background: #FF7C4D;
+/* background: linear-gradient(150deg,rgba(255, 124, 77, 1) 0%, rgba(92, 197, 131, 1) 100%); */
+
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+margin-bottom: 1rem;
+}
+
+
+
+
+
+.card-config {
+overflow: hidden;
+border-radius: 16px;
+}
+
+
+
+.project-img {
+height: 240px;
+object-fit: cover;
+transition: transform 0.3s ease;
+}
+.project-card:hover .project-img {
+transform: scale(1.05);
+}
+
+.section-color {
+    /* background-color: #f5f3ee; */
+    background: #FFDFE01A;
+    background-image: linear-gradient(218deg, #ffdfe01a 48%, #efd9e399);
+}
+
+
+.publication-item {
+    border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 16px;
+    border-left: 3px solid var(--primary-text);
+}
+
+.publication-item:hover {
+    border-left-color: var(--vermillion-light);
+}
+
+.btn-gradient {
+    background-color: var(--vermillion-light);
+    border-radius: 100vw;
+    color: white;
+    padding: 0.75rem 2rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+
+.team-img {
+width: 80px;
+height: 80px;
+object-fit: cover;
+border-radius: 50%;
+border: 3px solid #fff;
+box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+footer {
+background: #212529;
+color: #adb5bd;
+}
+
+
+.social-icon {
+width: 40px;
+height: 40px;
+border-radius: 8px;
+color: var(--vermillion-light);
+display: inline-flex;
+align-items: center;
+justify-content: center;
+transition: all 0.3s ease;
+}
+.social-icon:hover {
+background: #667eea;
+transform: translateY(-3px);
+}
+
+.teaching-item {
+    border: 3px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.foorter a {
+    --bs-link-color-rgb: var(--primary-text-rgb);
+    color: #adb5bd;
+}

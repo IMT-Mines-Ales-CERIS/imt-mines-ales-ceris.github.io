@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg padding-global">
+  <div class="container-fluid p-0">
+    <a class="navbar-brand" href="#">Ceris</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-grow-0" id="navbarTogglerDemo02">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item fw-semibold">
+          <a class="nav-link" aria-current="page" href="#">Projets</a>
+        </li>
+        <li class="nav-item fw-semibold">
+          <a class="nav-link" href="#">Publications</a>
+        </li>
+        <li class="nav-item fw-semibold">
+          <a class="nav-link" href="#">Équipe</a>
+        </li>
+        <li class="nav-item fw-semibold">
+          <a class="nav-link" href="#">Enseignements</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+    <header class="padding-global">
+        <div class="hero">
+            <img src="https://cdn.prod.website-files.com/68011fed23249a9699d7b42b/6802f26cb1c279ff927f7887_visualelectric-1744594470866.avif" alt="Image" class="hero-img">
+            <div class="dark-gradient"></div>
+            <div class="noise"></div>
+            <div class="hero-text padding-global row align-items-end">
+                <div class="hero-title col-xl">
+                    CERIS
+                </div>
+                <p class="hero-desc fw-semibold col-xl m-0">
+                    Le Centre d'Enseignement et de Recherche en Informatique et Systèmes est spécialisé dans les domaine de l'informatique, de l'intelligence artificielle et de l'industrie du futur.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Stats Section -->
+    <section class="pt-5 padding-global">
+        <div class="container">
+            <div class="row text-center g-4">
+                <div class="col-6 col-md-3">
+                    <div class="display-4 fw-semibold">45+</div>
+                    <div class="text-muted">Chercheurs</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="display-4 fw-semibold">200+</div>
+                    <div class="text-muted">Publications</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="display-4 fw-semibold">30+</div>
+                    <div class="text-muted">Projets actifs</div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="display-4 fw-semibold">8</div>
+                    <div class="text-muted">Filières</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Areas Section -->
+    <section id="domaines" class="padding-global py-5">
+        <div class="container-fluid py-5">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 section-title mb-3" style="color: var(--background-color--background-secondary)">Domaines de recherche</h2>
+                    <p class="lead text-muted">Notre laboratoire couvre un large éventail de domaines à la pointe de l'informatique moderne</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="research-area h-100">
+                        <div class="feature-icon mx-auto">
+                            <i data-lucide="brain" style="width: 32px; height: 32px;"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">Intelligence Artificielle</h5>
+                        <p class="small mb-0">Deep Learning, Machine Learning, Réseaux neuronaux</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="research-area h-100">
+                        <div class="feature-icon mx-auto">
+                            <i data-lucide="shield" style="width: 32px; height: 32px;"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">Cybersécurité</h5>
+                        <p class="small mb-0">Cryptographie, Sécurité réseau, Protection des données</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="research-area h-100">
+                        <div class="feature-icon mx-auto">
+                            <i data-lucide="cloud" style="width: 32px; height: 32px;"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">Cloud Computing</h5>
+                        <p class="small mb-0">Systèmes distribués, Architecture cloud, DevOps</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="research-area h-100">
+                        <div class="feature-icon mx-auto">
+                            <i data-lucide="eye" style="width: 32px; height: 32px;"></i>
+                        </div>
+                        <h5 class="fw-semibold mb-3">Vision par ordinateur</h5>
+                        
+                        <p class="small mb-0 test">Traitement d'images, Reconnaissance, Réalité augmentée</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projets" class="py-5 section-color padding-global">
+        <div class="container-fluid py-5">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 section-title mb-3">Projets de recherche</h2>
+                    <p class="lead text-muted">Nos initiatives actuelles pour repousser les frontières de l'informatique</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-config h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&amp;h=400&amp;fit=crop" alt="Projet" class="project-img">
+                        <div class="card-body d-flex flex-column justify-content-between gap-2">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-success badge-custom">En cours</span>
+                                    <small class="text-muted">2023-2026</small>
+                                </div>
+                                <h5 class="card-title fw-semibold">IA pour la santé prédictive</h5>
+                                <p class="card-text small text-muted">Développement d'algorithmes d'apprentissage profond pour la détection précoce de maladies à partir d'images médicales.</p>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="users" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>M. Durand, C. Dubois</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-config h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&amp;h=400&amp;fit=crop" alt="Projet" class="project-img">
+                        <div class="card-body d-flex flex-column justify-content-between gap-2">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-success badge-custom">En cours</span>
+                                    <small class="text-muted">2024-2027</small>
+                                </div>
+                                <h5 class="card-title fw-semibold">Sécurité quantique</h5>
+                                <p class="card-text small text-muted">Recherche sur les protocoles cryptographiques résistants aux attaques quantiques pour sécuriser les communications futures.</p>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="users" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>S. Martin, T. Bernard</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-config h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&amp;h=400&amp;fit=crop" alt="Projet" class="project-img">
+                        <div class="card-body d-flex flex-column justify-content-between gap-2">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-success badge-custom">En cours</span>
+                                    <small class="text-muted">2023-2025</small>
+                                </div>
+                                <h5 class="card-title fw-semibold">Smart Cities IoT</h5>
+                                <p class="card-text small text-muted">Infrastructure IoT distribuée pour la gestion intelligente des ressources urbaines et l'amélioration de la qualité de vie.</p>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="users" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>T. Bernard, A. Petit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-config h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=800&amp;h=400&amp;fit=crop" alt="Projet" class="project-img">
+                        <div class="card-body d-flex flex-column justify-content-between gap-2">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-info badge-custom">Planifié</span>
+                                    <small class="text-muted">2024-2028</small>
+                                </div>
+                                <h5 class="card-title fw-semibold">Blockchain pour la traçabilité</h5>
+                                <p class="card-text small text-muted">Systèmes de traçabilité basés sur la blockchain pour garantir l'authenticité et la transparence dans les chaînes d'approvisionnement.</p>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="users" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>S. Martin, A. Petit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-config h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&amp;h=400&amp;fit=crop" alt="Projet" class="project-img">
+                        <div class="card-body d-flex flex-column justify-content-between gap-2">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-success badge-custom">En cours</span>
+                                    <small class="text-muted">2022-2025</small>
+                                </div>
+                                <h5 class="card-title fw-semibold">Robotique autonome</h5>
+                                <p class="card-text small text-muted">Développement de systèmes de navigation et de prise de décision pour robots autonomes en environnements complexes.</p>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="users" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>J. Moreau, C. Dubois</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card card-config h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?w=800&amp;h=400&amp;fit=crop" alt="Projet" class="project-img">
+                        <div class="card-body d-flex flex-column justify-content-between gap-3">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-3">
+                                    <span class="badge bg-secondary badge-custom">Terminé</span>
+                                    <small class="text-muted">2021-2023</small>
+                                </div>
+                                <h5 class="card-title fw-semibold">Optimisation énergétique cloud</h5>
+                                <p class="card-text small text-muted">Algorithmes d'optimisation pour réduire la consommation énergétique des centres de données tout en maintenant les performances.</p>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="users" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>T. Bernard, A. Petit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="py-5 padding-global">
+        <div class="container-fluid py-5">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 section-title mb-3">Publications récentes</h2>
+                    <p class="lead text-muted">Nos contributions à la recherche scientifique en informatique</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-12">
+                    <div class="publication-item p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="flex-grow-1">
+                                <h5 class="fw-semibold mb-2">Deep Learning Approaches for Real-Time Object Detection in Autonomous Systems</h5>
+                                <p class="text-muted small mb-3">M. Durand, C. Dubois, J. Moreau</p>
+                                <div class="d-flex gap-2 mb-3 flex-wrap">
+                                    <span class="badge badge-config">Intelligence Artificielle</span>
+                                    <span class="badge badge-config">Vision par ordinateur</span>
+                                </div>
+                                <p class="small text-muted mb-0">IEEE Transactions on Neural Networks and Learning Systems, 2024</p>
+                            </div>
+                            <a href="#" class="btn btn-outline-secondary btn-sm ms-3">
+                                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="publication-item p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="flex-grow-1">
+                                <h5 class="fw-semibold mb-2">Post-Quantum Cryptography: A Comprehensive Survey of Lattice-Based Schemes</h5>
+                                <p class="text-muted small mb-3">S. Martin, T. Bernard</p>
+                                <div class="d-flex gap-2 mb-3 flex-wrap">
+                                    <span class="badge badge-config">Cybersécurité</span>
+                                    <span class="badge badge-config">Cryptographie</span>
+                                </div>
+                                <p class="small text-muted mb-0">ACM Computing Surveys, 2024</p>
+                            </div>
+                            <a href="#" class="btn btn-outline-secondary btn-sm ms-3">
+                                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="publication-item p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="flex-grow-1">
+                                <h5 class="fw-semibold mb-2">Scalable Distributed Computing Architecture for Big Data Analytics</h5>
+                                <p class="text-muted small mb-3">T. Bernard, A. Petit</p>
+                                <div class="d-flex gap-2 mb-3 flex-wrap">
+                                    <span class="badge badge-config">Systèmes distribués</span>
+                                    <span class="badge badge-config">Big Data</span>
+                                </div>
+                                <p class="small text-muted mb-0">Journal of Parallel and Distributed Computing, 2023</p>
+                            </div>
+                            <a href="#" class="btn btn-outline-secondary btn-sm ms-3">
+                                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-gradient">
+                    Voir toutes les publications
+                    <i data-lucide="arrow-right" class="ms-2" style="width: 16px; height: 16px;"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="equipe" class="section-color py-5 padding-global">
+        <div class="container py-5">
+
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 section-title mb-3">Notre équipe</h2>
+                    <p class="lead text-muted">Des experts passionnés dédiés à faire avancer la recherche en informatique</p>
+                </div>
+            </div>
+
+            <!-- Researchers -->
+            <div class="mb-5">
+                <h4 class="text-uppercase text-muted small fw-semibold mb-4">Chercheurs</h4>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&amp;h=400&amp;fit=crop" alt="Chercheur" class="team-img mb-3">
+                                <h5 class="fw-semibold mb-1">Dr. Marc Durand</h5>
+                                <p class="text-primary small mb-2">Directeur de recherche</p>
+                                <p class="small text-muted mb-3">Intelligence artificielle, Apprentissage automatique</p>
+                                <div class="d-flex gap-2">
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="linkedin" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&amp;h=400&amp;fit=crop" alt="Chercheur" class="team-img mb-3">
+                                <h5 class="fw-semibold mb-1">Dr. Sophie Martin</h5>
+                                <p class="text-primary small mb-2">Chercheuse principale</p>
+                                <p class="small text-muted mb-3">Cybersécurité, Cryptographie</p>
+                                <div class="d-flex gap-2">
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="linkedin" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&amp;h=400&amp;fit=crop" alt="Chercheur" class="team-img mb-3">
+                                <h5 class="fw-semibold mb-1">Dr. Thomas Bernard</h5>
+                                <p class="text-primary small mb-2">Chercheur senior</p>
+                                <p class="small text-muted mb-3">Systèmes distribués, Cloud computing</p>
+                                <div class="d-flex gap-2">
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="linkedin" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&amp;h=400&amp;fit=crop" alt="Chercheur" class="team-img mb-3">
+                                <h5 class="fw-semibold mb-1">Dr. Claire Dubois</h5>
+                                <p class="text-primary small mb-2">Chercheuse</p>
+                                <p class="small text-muted mb-3">Vision par ordinateur, Traitement d'images</p>
+                                <div class="d-flex gap-2">
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="linkedin" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&amp;h=400&amp;fit=crop" alt="Chercheur" class="team-img mb-3">
+                                <h5 class="fw-semibold mb-1">Dr. Alexandre Petit</h5>
+                                <p class="text-primary small mb-2">Chercheur</p>
+                                <p class="small text-muted mb-3">Bases de données, Big Data</p>
+                                <div class="d-flex gap-2">
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="linkedin" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=400&amp;h=400&amp;fit=crop" alt="Chercheur" class="team-img mb-3">
+                                <h5 class="fw-semibold mb-1">Dr. Julien Moreau</h5>
+                                <p class="text-primary small mb-2">Chercheur</p>
+                                <p class="small text-muted mb-3">Réseaux neuronaux, Deep Learning</p>
+                                <div class="d-flex gap-2">
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="mail" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                    <a href="#" class="social-icon">
+                                        <i data-lucide="linkedin" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff -->
+            <div>
+                <h4 class="text-uppercase text-muted small fw-semibold mb-4">Personnel administratif et technique</h4>
+                <div class="row g-4">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="feature-icon mx-auto mb-3" style="width: 50px; height: 50px;">
+                                    <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+                                </div>
+                                <h6 class="fw-semibold mb-1">Marie Leblanc</h6>
+                                <p class="small text-muted mb-0">Responsable administrative</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="feature-icon mx-auto mb-3" style="width: 50px; height: 50px;">
+                                    <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+                                </div>
+                                <h6 class="fw-semibold mb-1">Pierre Rousseau</h6>
+                                <p class="small text-muted mb-0">Ingénieur système</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="feature-icon mx-auto mb-3" style="width: 50px; height: 50px;">
+                                    <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+                                </div>
+                                <h6 class="fw-semibold mb-1">Isabelle Vincent</h6>
+                                <p class="small text-muted mb-0">Gestionnaire de projets</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-config h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="feature-icon mx-auto mb-3" style="width: 50px; height: 50px;">
+                                    <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+                                </div>
+                                <h6 class="fw-semibold mb-1">Laurent Simon</h6>
+                                <p class="small text-muted mb-0">Technicien réseau</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teaching Programs Section -->
+    <section id="enseignement" class="py-5 padding-global">
+        <div class="container py-5">
+
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 section-title mb-3">Filières d'enseignement</h2>
+                    <p class="lead text-muted">Nos programmes de formation soutenus par le laboratoire</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card card-config h-100 teaching-item">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div class="feature-icon">
+                                    <i data-lucide="brain" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <span class="badge bg-light text-dark badge-custom">Master</span>
+                            </div>
+                            <h4 class="fw-semibold mb-3">Intelligence Artificielle et Data Science</h4>
+                            <p class="text-muted mb-4">Formation approfondie en apprentissage automatique, traitement de données massives et analyse prédictive.</p>
+                            <div class="d-flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-config">Machine Learning</span>
+                                <span class="badge badge-config">Deep Learning</span>
+                                <span class="badge badge-config">Big Data</span>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>2 ans • Temps plein</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-config h-100 teaching-item">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div class="feature-icon">
+                                    <i data-lucide="shield" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <span class="badge bg-light text-dark badge-custom">Master</span>
+                            </div>
+                            <h4 class="fw-semibold mb-3">Cybersécurité et Cryptographie</h4>
+                            <p class="text-muted mb-4">Expertise en sécurité des systèmes, cryptographie avancée et protection des infrastructures critiques.</p>
+                            <div class="d-flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-config">Sécurité réseau</span>
+                                <span class="badge badge-config">Cryptographie</span>
+                                <span class="badge badge-config">Ethical Hacking</span>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>2 ans • Temps plein</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-config h-100 teaching-item">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div class="feature-icon">
+                                    <i data-lucide="cloud" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <span class="badge bg-light text-dark badge-custom">Master</span>
+                            </div>
+                            <h4 class="fw-semibold mb-3">Systèmes Distribués et Cloud Computing</h4>
+                            <p class="text-muted mb-4">Conception et gestion d'architectures distribuées, cloud native et systèmes à grande échelle.</p>
+                            <div class="d-flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-config">Cloud</span>
+                                <span class="badge badge-config">DevOps</span>
+                                <span class="badge badge-config">Microservices</span>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>2 ans • Temps plein</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-config h-100 teaching-item">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-4">
+                                <div class="feature-icon">
+                                    <i data-lucide="eye" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <span class="badge bg-light text-dark badge-custom">Master</span>
+                            </div>
+                            <h4 class="fw-semibold mb-3">Vision par Ordinateur et Robotique</h4>
+                            <p class="text-muted mb-4">Techniques avancées de traitement d'images, reconnaissance d'objets et systèmes robotiques intelligents.</p>
+                            <div class="d-flex gap-2 mb-4 flex-wrap">
+                                <span class="badge badge-config">Computer Vision</span>
+                                <span class="badge badge-config">Robotique</span>
+                                <span class="badge badge-config">Réalité augmentée</span>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>2 ans • Temps plein</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+            <footer class="py-5">
+                <div class="container py-4">
+                    <div class="row g-4 mb-4">
+                        <div class="col-lg-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="logo-box me-2">LI</div>
+                                <span class="fw-semibold text-white">Laboratoire d'Informatique</span>
+                            </div>
+                            <p class="small">Excellence en recherche et innovation technologique</p>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <h6 class="text-white fw-semibold mb-3">Laboratoire</h6>
+                            <ul class="list-unstyled small">
+                                <li class="mb-2"><a href="#equipe" class="text-decoration-none">Équipe</a></li>
+                                <li class="mb-2"><a href="#publications" class="text-decoration-none">Publications</a></li>
+                                <li class="mb-2"><a href="#projets" class="text-decoration-none">Projets</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <h6 class="text-white fw-semibold mb-3">Formation</h6>
+                            <ul class="list-unstyled small">
+                                <li class="mb-2"><a href="#enseignement" class="text-decoration-none">Filières</a></li>
+                                <li class="mb-2"><a href="#" class="text-decoration-none">Admission</a></li>
+                                <li class="mb-2"><a href="#" class="text-decoration-none">Doctorat</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <h6 class="text-white fw-semibold mb-3">Suivez-nous</h6>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="social-icon text-white">
+                                    <i data-lucide="twitter" style="width: 18px; height: 18px;"></i>
+                                </a>
+                                <a href="#" class="social-icon text-white">
+                                    <i data-lucide="linkedin" style="width: 18px; height: 18px;"></i>
+                                </a>
+                                <a href="#" class="social-icon text-white">
+                                    <i data-lucide="github" style="width: 18px; height: 18px;"></i>
+                                </a>
+                                <a href="#" class="social-icon text-white">
+                                    <i data-lucide="youtube" style="width: 18px; height: 18px;"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="border-secondary">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center pt-3">
+                        <p class="small mb-3 mb-md-0">© 2024 Laboratoire d'Informatique. Tous droits réservés.</p>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="text-decoration-none small">Mentions légales</a>
+                            <a href="#" class="text-decoration-none small">Confidentialité</a>
+                            <a href="#" class="text-decoration-none small">Cookies</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    lucide.createIcons();
+</script>
+    
+</body>
+</html>
