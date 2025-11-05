@@ -10,7 +10,9 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <script src="publications.js"></script>
+    <script src="hal.js" type="module"></script>
+    <script src="data_test.js"></script>
+    <script src="publications.js" type="module"></script>
 </head>
 <body>
 
@@ -270,64 +272,7 @@
                 </div>
             </div>
             
-            <div class="row g-4">
-                <publication-item></publication-item>
-                
-                <div class="col-12">
-                    <div class="publication-item p-4">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="flex-grow-1">
-                                <h5 class="fw-semibold mb-2">Deep Learning Approaches for Real-Time Object Detection in Autonomous Systems</h5>
-                                <p class="text-muted small mb-3">M. Durand, C. Dubois, J. Moreau</p>
-                                <div class="d-flex gap-2 mb-3 flex-wrap">
-                                    <span class="badge badge-config">Intelligence Artificielle</span>
-                                    <span class="badge badge-config">Vision par ordinateur</span>
-                                </div>
-                                <p class="small text-muted mb-0">IEEE Transactions on Neural Networks and Learning Systems, 2024</p>
-                            </div>
-                            <a href="#" class="btn btn-outline-secondary btn-sm ms-3">
-                                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="publication-item p-4">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="flex-grow-1">
-                                <h5 class="fw-semibold mb-2">Post-Quantum Cryptography: A Comprehensive Survey of Lattice-Based Schemes</h5>
-                                <p class="text-muted small mb-3">S. Martin, T. Bernard</p>
-                                <div class="d-flex gap-2 mb-3 flex-wrap">
-                                    <span class="badge badge-config">Cybersécurité</span>
-                                    <span class="badge badge-config">Cryptographie</span>
-                                </div>
-                                <p class="small text-muted mb-0">ACM Computing Surveys, 2024</p>
-                            </div>
-                            <a href="#" class="btn btn-outline-secondary btn-sm ms-3">
-                                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="publication-item p-4">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="flex-grow-1">
-                                <h5 class="fw-semibold mb-2">Scalable Distributed Computing Architecture for Big Data Analytics</h5>
-                                <p class="text-muted small mb-3">T. Bernard, A. Petit</p>
-                                <div class="d-flex gap-2 mb-3 flex-wrap">
-                                    <span class="badge badge-config">Systèmes distribués</span>
-                                    <span class="badge badge-config">Big Data</span>
-                                </div>
-                                <p class="small text-muted mb-0">Journal of Parallel and Distributed Computing, 2023</p>
-                            </div>
-                            <a href="#" class="btn btn-outline-secondary btn-sm ms-3">
-                                <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <publication-item data-rows="5"></publication-item>
 
             <div class="text-center mt-5">
                 <a href="#" class="btn btn-gradient">
@@ -541,9 +486,9 @@
                             <h4 class="fw-semibold mb-3">Intelligence Artificielle et Data Science</h4>
                             <p class="text-muted mb-4">Formation approfondie en apprentissage automatique, traitement de données massives et analyse prédictive.</p>
                             <div class="d-flex gap-2 mb-4 flex-wrap">
-                                <span class="badge badge-config">Machine Learning</span>
-                                <span class="badge badge-config">Deep Learning</span>
-                                <span class="badge badge-config">Big Data</span>
+                                <span class="badge base-badge">Machine Learning</span>
+                                <span class="badge base-badge">Deep Learning</span>
+                                <span class="badge base-badge">Big Data</span>
                             </div>
                             <div class="d-flex align-items-center text-muted small">
                                 <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>
@@ -564,9 +509,9 @@
                             <h4 class="fw-semibold mb-3">Cybersécurité et Cryptographie</h4>
                             <p class="text-muted mb-4">Expertise en sécurité des systèmes, cryptographie avancée et protection des infrastructures critiques.</p>
                             <div class="d-flex gap-2 mb-4 flex-wrap">
-                                <span class="badge badge-config">Sécurité réseau</span>
-                                <span class="badge badge-config">Cryptographie</span>
-                                <span class="badge badge-config">Ethical Hacking</span>
+                                <span class="badge base-badge">Sécurité réseau</span>
+                                <span class="badge base-badge">Cryptographie</span>
+                                <span class="badge base-badge">Ethical Hacking</span>
                             </div>
                             <div class="d-flex align-items-center text-muted small">
                                 <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>
@@ -587,9 +532,9 @@
                             <h4 class="fw-semibold mb-3">Systèmes Distribués et Cloud Computing</h4>
                             <p class="text-muted mb-4">Conception et gestion d'architectures distribuées, cloud native et systèmes à grande échelle.</p>
                             <div class="d-flex gap-2 mb-4 flex-wrap">
-                                <span class="badge badge-config">Cloud</span>
-                                <span class="badge badge-config">DevOps</span>
-                                <span class="badge badge-config">Microservices</span>
+                                <span class="badge base-badge">Cloud</span>
+                                <span class="badge base-badge">DevOps</span>
+                                <span class="badge base-badge">Microservices</span>
                             </div>
                             <div class="d-flex align-items-center text-muted small">
                                 <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>
@@ -610,9 +555,9 @@
                             <h4 class="fw-semibold mb-3">Vision par Ordinateur et Robotique</h4>
                             <p class="text-muted mb-4">Techniques avancées de traitement d'images, reconnaissance d'objets et systèmes robotiques intelligents.</p>
                             <div class="d-flex gap-2 mb-4 flex-wrap">
-                                <span class="badge badge-config">Computer Vision</span>
-                                <span class="badge badge-config">Robotique</span>
-                                <span class="badge badge-config">Réalité augmentée</span>
+                                <span class="badge base-badge">Computer Vision</span>
+                                <span class="badge base-badge">Robotique</span>
+                                <span class="badge base-badge">Réalité augmentée</span>
                             </div>
                             <div class="d-flex align-items-center text-muted small">
                                 <i data-lucide="clock" class="me-2" style="width: 16px; height: 16px;"></i>

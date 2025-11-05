@@ -73,10 +73,7 @@ body {
     }
 }
 
-.badge-config {
-    color: white;
-    background-color: var(--primary-text);
-}
+
 
 
 /* 
@@ -98,6 +95,10 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+.base-badge {
+    color: white;
+    background-color: var(--primary-text);
+}
 
 /*
 888    888                          
