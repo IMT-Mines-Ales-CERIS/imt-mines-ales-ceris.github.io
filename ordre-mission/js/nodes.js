@@ -18,10 +18,8 @@ let nodeIds = {
         'options': {
             '': 'Sélectionner une option',
             'list2_001': 'Commun (si aucune autre possibilité)',
-            'list2_002': 'I3A (UMR)',
-            'list2_003': 'I3A (hors UMR)',
-            'list2_004': 'ISOAR (LSR)',
-            'list2_005': 'ISOAR (hors LSR)',
+            'list2_002': 'SyCoIA',
+            'list2_004': 'EDHM',
             'list2_006': 'PFM',
             'list2_007': 'Projet',
         },
@@ -39,32 +37,6 @@ let nodeIds = {
             'list3_004': 'Véhicule de location',
         },
         'attributes': {}
-    },
-    'list4': {
-        'type': 'select',
-        'options': {
-            '': 'Sélectionner une équipe',
-            'list4_001': 'MIB',
-            'list4_002': 'PIAS',
-            'list4_003': 'LAC',
-            'list4_004': 'AXES'
-        },
-        'attributes': {
-            'required': ''
-        }
-    },
-    'list5': {
-        'type': 'select',
-        'options': {
-            '': 'Sélectionner une équipe',
-            'list5_001': 'Aléa',
-            'list5_002': 'Vulnérabilité',
-            'list5_003': 'Systèmes',
-            'list5_004': 'Crise'
-        },
-        'attributes': {
-            'required': ''
-        }
     },
     'list6': {
         'type': 'select',
@@ -196,12 +168,38 @@ let nodeIds = {
             }
         ]
     },
+    'detail2_002': {
+        'type': 'detail',
+        'elements': [
+            {
+                'type': 'input',
+                'attributes': {
+                    'type': 'text',
+                    'placeholder': "Nom de l'équipe",
+                    'required': ''
+                }
+            }
+        ]
+    },
+    'detail2_004': {
+        'type': 'detail',
+        'elements': [
+            {
+                'type': 'input',
+                'attributes': {
+                    'type': 'text',
+                    'placeholder': "Nom de l'équipe",
+                    'required': ''
+                }
+            }
+        ]
+    },
 };
 
 let NODE_LINKS = {
     'list1_001': 'list2',
-    'list2_002': 'list4',
-    'list2_004': 'list5',
+    'list2_002': 'detail2_002',
+    'list2_004': 'detail2_004',
     'list2_007': 'detail1',
     'list3_001': 'detail2',
     'list1_002': 'detail3',
