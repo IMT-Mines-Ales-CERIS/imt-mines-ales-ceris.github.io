@@ -1,0 +1,78 @@
+:root {
+    --primary-background-color: #fcfbfa;
+    --primary-text: #153a43;
+    --primary-text-rgb: 21, 58, 67;
+    --secondary-text: rgba(21, 58, 67, 0.75);
+    --vermillion-light: #ff7c4d;
+    --vermillion-light-rgb: 255, 124, 77;
+}
+
+body {
+    font-family: Inter, "Inter Variable", system-ui, Arial, sans-serif;
+    color: var(--primary-text);
+    background-color: var(--primary-background-color);
+    text-rendering: optimizeLegibility;
+}
+
+.text-muted { color: var(--secondary-text) !important; }
+.navbar-brand { font-size: 1.5rem; font-weight: 900; color: var(--primary-text); }
+.section-title { font-weight: 800; letter-spacing: -0.02em; }
+
+.padding-global { padding-left: 2rem; padding-right: 2rem; }
+@media (max-width: 768px) { .padding-global { padding-left: 1.25rem; padding-right: 1.25rem; } }
+
+.base-radius-16 { border-radius: 16px; }
+.base-shadow { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
+.base-badge { color: #fff; background-color: var(--primary-text); font-weight: 500; }
+
+a { color: var(--primary-text); }
+a:hover { color: var(--vermillion-light); }
+.btn-link { color: var(--vermillion-light); text-decoration: none; }
+.btn-outline-secondary { --bs-btn-color: var(--primary-text); --bs-btn-border-color: rgba(21, 58, 67, 0.4);
+    --bs-btn-hover-bg: var(--primary-text); --bs-btn-hover-border-color: var(--primary-text); }
+.form-control:focus, .form-select:focus { border-color: var(--vermillion-light); box-shadow: 0 0 0 0.2rem rgba(var(--vermillion-light-rgb), 0.25); }
+
+/* Structures */
+.struct-chip { display: inline-flex; align-items: center; gap: .4rem; padding: .25rem .6rem; border-radius: 999px;
+    background: #fff; border: 1px solid rgba(21, 58, 67, 0.25); font-size: .85rem; }
+.struct-chip small { color: var(--secondary-text); }
+.chip-remove { border: 0; background: none; padding: 0 .1rem; line-height: 1; color: inherit; opacity: .7; font-size: 1rem; cursor: pointer; }
+.chip-remove:hover { opacity: 1; color: var(--vermillion-light); }
+
+/* Filtres */
+.filters { background: #fff; position: sticky; top: 1rem; max-height: calc(100vh - 2rem); overflow-y: auto; }
+.filter-chip { display: inline-flex; align-items: center; gap: .3rem; font-size: .75rem; }
+.filter-chip .chip-remove { color: #fff; }
+.btn-toggle { border: 1px solid rgba(21, 58, 67, 0.3); background: #fff; color: var(--primary-text); font-size: .75rem; }
+.btn-toggle:hover { border-color: var(--vermillion-light); }
+.btn-toggle.active { background: var(--primary-text); color: #fff; border-color: var(--primary-text); }
+
+/* Indicateurs */
+.kpi { background: #fff; padding: 1rem 1.25rem; height: 100%; }
+.kpi .value { font-size: 1.9rem; font-weight: 800; line-height: 1.1; }
+.kpi .label { font-size: .8rem; color: var(--secondary-text); }
+
+/* Onglets */
+.nav-tabs { --bs-nav-tabs-link-active-color: var(--primary-text); --bs-nav-link-color: var(--secondary-text);
+    --bs-nav-link-hover-color: var(--vermillion-light); --bs-nav-tabs-link-active-border-color: transparent transparent var(--vermillion-light); }
+.nav-tabs .nav-link { font-weight: 600; }
+.nav-tabs .nav-link.active { border-bottom: 3px solid var(--vermillion-light); background: transparent; }
+
+/* Liste */
+.publication-item { background: #fff; border-left: 3px solid var(--primary-text); padding: 1.25rem 1.5rem; }
+.publication-item:hover { border-left-color: var(--vermillion-light); }
+.publication-item h3 { font-size: 1.05rem; font-weight: 600; }
+.pub-authors { font-size: .85rem; }
+.pub-authors button, .pub-keywords button { border: 0; background: none; padding: 0; color: inherit; }
+.pub-authors button:hover { color: var(--vermillion-light); text-decoration: underline; }
+.pub-keywords button { cursor: pointer; }
+.pub-keywords .badge:hover { background-color: var(--vermillion-light); }
+.pub-venue { font-size: .85rem; }
+.pub-abstract summary { cursor: pointer; font-size: .8rem; color: var(--secondary-text); }
+.pub-abstract p { font-size: .85rem; margin: .5rem 0 0; }
+
+/* Graphiques / réseau */
+.chart-card { background: #fff; height: 100%; }
+.chart-box { position: relative; height: 320px; }
+.graph-controls { background: #fff; }
+.graph-box { height: 620px; background: #fff; }

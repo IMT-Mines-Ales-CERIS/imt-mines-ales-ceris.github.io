@@ -2,9 +2,9 @@
 (function() {
     let currentPath = window.location.pathname;
     let nbFolders = currentPath.split('/').length - 1;
-    let imagePath = `${"../".repeat(nbFolders)}images/logo-hceres.png`;
-    let faviconPath = `${"../".repeat(nbFolders)}images/favicon.png`;
-    let imageSycoiaPath = `${"../".repeat(nbFolders)}images/logo_unite.png`;
+    let imagePath = `images/logo-hceres.png`;
+    let faviconPath = `images/favicon.png`;
+    let imageSycoiaPath = `images/logo_unite.png`;
     let tagContent = `
         <div class="bg-image-index padding-image-index">
             <div class="container d-flex flex-column">

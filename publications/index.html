@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publications – CERIS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+    <script src="js/main.js" type="module"></script>
+</head>
+<body>
+    <nav class="navbar padding-global">
+        <div class="container-fluid p-0">
+            <a class="navbar-brand" href="../index.html">Ceris</a>
+            <ul class="navbar-nav flex-row gap-4 fw-semibold">
+                <li class="nav-item"><a class="nav-link" href="../index.html">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="index.html">Publications</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="padding-global pt-4 pb-3">
+        <h1 class="display-6 section-title mb-2">Publications</h1>
+        <div class="d-flex flex-wrap align-items-center gap-2" id="struct-bar">
+            <span class="text-muted small me-1">Structures HAL :</span>
+            <span id="struct-chips" class="d-flex flex-wrap gap-2"></span>
+            <form id="struct-form" class="d-flex gap-2 ms-lg-2" autocomplete="off">
+                <input id="struct-input" class="form-control form-control-sm" style="width: 12rem"
+                       inputmode="numeric" placeholder="Ajouter un structId HAL" aria-label="Identifiant de structure HAL">
+                <button class="btn btn-sm btn-outline-secondary" type="submit">Ajouter</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="padding-global pb-5">
+        <div id="status" class="alert alert-info" role="status" hidden></div>
+
+        <div class="row g-4">
+            <!-- Filtres -->
+            <aside class="col-lg-3">
+                <form id="filters" class="filters base-radius-16 base-shadow p-3" onsubmit="return false" autocomplete="off">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="h6 fw-bold mb-0">Filtres</h2>
+                        <button id="f-reset" type="button" class="btn btn-link btn-sm p-0">Réinitialiser</button>
+                    </div>
+
+                    <label class="form-label small fw-semibold" for="f-text">Titre ou résumé</label>
+                    <input id="f-text" class="form-control form-control-sm mb-3" type="search" placeholder="ex. réseau de neurones">
+
+                    <label class="form-label small fw-semibold" for="f-author">Auteur <span class="text-muted fw-normal">(Entrée pour ajouter)</span></label>
+                    <input id="f-author" class="form-control form-control-sm" list="dl-authors" placeholder="Nom ou prénom">
+                    <datalist id="dl-authors"></datalist>
+                    <div id="chips-authors" class="d-flex flex-wrap gap-1 my-2"></div>
+
+                    <label class="form-label small fw-semibold" for="f-keyword">Mot-clé <span class="text-muted fw-normal">(Entrée pour ajouter)</span></label>
+                    <input id="f-keyword" class="form-control form-control-sm" list="dl-keywords" placeholder="ex. machine learning">
+                    <datalist id="dl-keywords"></datalist>
+                    <div id="chips-keywords" class="d-flex flex-wrap gap-1 my-2"></div>
+
+                    <label class="form-label small fw-semibold" for="f-venue">Conférence / revue</label>
+                    <input id="f-venue" class="form-control form-control-sm mb-3" list="dl-venues" placeholder="ex. ICML">
+                    <datalist id="dl-venues"></datalist>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold" for="f-year-min">Années</label>
+                            <select id="f-year-min" class="form-select form-select-sm"></select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-semibold" for="f-year-max">&nbsp;</label>
+                            <select id="f-year-max" class="form-select form-select-sm"></select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-label small fw-semibold">Type de document</div>
+                        <div id="f-types" class="d-flex flex-wrap gap-1"></div>
+                    </div>
+
+                    <div id="f-structs-group" class="mb-1" hidden>
+                        <div class="form-label small fw-semibold">Équipe</div>
+                        <div id="f-structs" class="d-flex flex-wrap gap-1"></div>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- Résultats -->
+            <section class="col-lg-9">
+                <div id="kpis" class="row g-3 mb-4"></div>
+
+                <ul class="nav nav-tabs mb-3" id="view-tabs" role="tablist">
+                    <li class="nav-item"><button class="nav-link active" data-view="list" data-bs-toggle="tab" data-bs-target="#view-list" type="button" role="tab">Publications <span id="count-badge" class="badge base-badge ms-1">0</span></button></li>
+                    <li class="nav-item"><button class="nav-link" data-view="stats" data-bs-toggle="tab" data-bs-target="#view-stats" type="button" role="tab">Statistiques</button></li>
+                    <li class="nav-item"><button class="nav-link" data-view="graph" data-bs-toggle="tab" data-bs-target="#view-graph" type="button" role="tab">Réseau d'auteurs</button></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="view-list" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span id="list-summary" class="text-muted small"></span>
+                            <select id="sort" class="form-select form-select-sm w-auto" aria-label="Tri">
+                                <option value="year-desc">Plus récentes d'abord</option>
+                                <option value="year-asc">Plus anciennes d'abord</option>
+                                <option value="title">Titre (A→Z)</option>
+                            </select>
+                        </div>
+                        <div id="list" class="d-flex flex-column gap-3"></div>
+                        <nav id="pager" class="d-flex justify-content-center align-items-center gap-3 mt-4"></nav>
+                    </div>
+
+                    <div class="tab-pane fade" id="view-stats" role="tabpanel">
+                        <div id="stats-empty" class="text-muted" hidden>Aucune publication ne correspond aux filtres.</div>
+                        <div id="stats-body" class="row g-4">
+                            <div class="col-12 col-xl-8"><div class="chart-card base-radius-16 base-shadow p-3"><h3 class="h6 fw-bold">Publications par année</h3><div class="chart-box"><canvas id="chart-years"></canvas></div></div></div>
+                            <div class="col-12 col-xl-4"><div class="chart-card base-radius-16 base-shadow p-3"><h3 class="h6 fw-bold">Types de documents</h3><div class="chart-box"><canvas id="chart-types"></canvas></div></div></div>
+                            <div class="col-12 col-xl-6"><div class="chart-card base-radius-16 base-shadow p-3"><h3 class="h6 fw-bold">Auteurs les plus actifs</h3><div class="chart-box"><canvas id="chart-authors"></canvas></div></div></div>
+                            <div class="col-12 col-xl-6"><div class="chart-card base-radius-16 base-shadow p-3"><h3 class="h6 fw-bold">Mots-clés les plus fréquents</h3><div class="chart-box"><canvas id="chart-keywords"></canvas></div></div></div>
+                            <div class="col-12"><div class="chart-card base-radius-16 base-shadow p-3"><h3 class="h6 fw-bold">Conférences et revues</h3><div class="chart-box"><canvas id="chart-venues"></canvas></div></div></div>
+                            <p class="text-muted small mb-0">Cliquez sur une barre ou une part pour filtrer.</p>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="view-graph" role="tabpanel">
+                        <div class="graph-controls base-radius-16 base-shadow p-3 mb-3">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="g-min-pubs">Publications min. / auteur</label>
+                                    <input id="g-min-pubs" class="form-control form-control-sm" type="number" min="1" value="2">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="g-max-nodes">Auteurs affichés (max)</label>
+                                    <input id="g-max-nodes" class="form-control form-control-sm" type="number" min="5" max="500" value="80">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="g-min-weight">Co-publications min. / lien</label>
+                                    <input id="g-min-weight" class="form-control form-control-sm" type="number" min="1" value="1">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="g-max-authors">Ignorer si plus de N signataires</label>
+                                    <input id="g-max-authors" class="form-control form-control-sm" type="number" min="2" value="30">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-muted small mb-2" id="graph-summary"></div>
+                        <div id="graph" class="graph-box base-radius-16 base-shadow"></div>
+                        <div id="graph-info" class="mt-3"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
