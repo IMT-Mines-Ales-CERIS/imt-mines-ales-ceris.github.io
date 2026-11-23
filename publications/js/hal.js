@@ -98,9 +98,10 @@ const asArray = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v 
 /**
  * Résout les formes abrégées via le référentiel HAL, dont le docid porte l'identifiant auteur.
  * @param {string[]} names
+ * @param {(phase: 'search'|'aliases', loaded: number, total: number) => void} [onProgress]
  * @returns {Promise<Map<string, number>>} personKey -> identifiant HAL non ambigu
  */
-export async function fetchAuthorIdentityMap(names) {
+export async function fetchAuthorIdentityMap(names, onProgress) {
     const initials = [...new Map(names
         .filter(name => /(?:^|[\s.])[\p{L}]\./u.test(name))
         .map(name => [personKey(name), name])).values()];
@@ -111,7 +112,9 @@ export async function fetchAuthorIdentityMap(names) {
     const batches = [];
     for (let i = 0; i < initials.length; i += 50) batches.push(initials.slice(i, i + 50));
 
-    for (const batch of batches) {
+    onProgress?.('search', 0, batches.length);
+    let completed = 0;
+    const searchResults = await Promise.all(batches.map(async batch => {
         const terms = batch.flatMap(name => {
             const escaped = name.replace(/[\\"]/g, '\\$&');
             const surname = name.trim().split(/\s+/).at(-1).replace(/[\\"]/g, '\\$&');
@@ -124,6 +127,10 @@ export async function fetchAuthorIdentityMap(names) {
             wt: 'json',
         });
         const json = await getJson(`${HAL_API}/ref/author/?${params}`);
+        onProgress?.('search', ++completed, batches.length);
+        return { batch, docs: json.response.docs };
+    }));
+    for (const { batch, docs } of searchResults) {
         const requested = batch.map(name => {
             const parts = name.trim().split(/\s+/);
             return {
@@ -135,7 +142,7 @@ export async function fetchAuthorIdentityMap(names) {
                 prefixIds: new Set(),
             };
         });
-        for (const doc of json.response.docs) {
+        for (const doc of docs) {
             const match = String(doc.docid ?? '').match(/-(\d+)$/);
             const id = match ? Number(match[1]) : 0;
             if (!id) continue;
@@ -160,7 +167,9 @@ export async function fetchAuthorIdentityMap(names) {
 
     const idBatches = [];
     for (let i = 0; i < candidateIds.length; i += 50) idBatches.push(candidateIds.slice(i, i + 50));
-    for (const batch of idBatches) {
+    onProgress?.('aliases', 0, idBatches.length);
+    completed = 0;
+    const aliasResults = await Promise.all(idBatches.map(async batch => {
         const terms = batch.map(id => `*-${id}`);
         const params = new URLSearchParams({
             q: `docid:(${terms.join(' OR ')})`,
@@ -169,7 +178,11 @@ export async function fetchAuthorIdentityMap(names) {
             wt: 'json',
         });
         const json = await getJson(`${HAL_API}/ref/author/?${params}`);
-        for (const doc of json.response.docs) {
+        onProgress?.('aliases', ++completed, idBatches.length);
+        return json.response.docs;
+    }));
+    for (const docs of aliasResults) {
+        for (const doc of docs) {
             const nameKey = personKey(doc.fullName_s ?? '');
             const match = String(doc.docid ?? '').match(/-(\d+)$/);
             const id = match ? Number(match[1]) : 0;
@@ -303,7 +316,7 @@ export function buildPublications(results, halAuthorIds = new Map()) {
 
 /**
  * @param {number[]} structIds
- * @param {(loaded: number, total: number) => void} [onProgress] agrégé sur toutes les structures
+ * @param {(progress: { phase: 'publications'|'author-search'|'author-aliases', loaded: number, total: number }) => void} [onProgress]
  */
 export async function loadAll(structIds, onProgress) {
     /** @type {Map<number, [number, number]>} */
@@ -311,7 +324,7 @@ export async function loadAll(structIds, onProgress) {
     const report = () => {
         let loaded = 0, total = 0;
         for (const [l, t] of progress.values()) { loaded += l; total += t; }
-        onProgress?.(loaded, total);
+        onProgress?.({ phase: 'publications', loaded, total });
     };
 
     const [structures, results] = await Promise.all([
@@ -325,7 +338,14 @@ export async function loadAll(structIds, onProgress) {
         docs.flatMap(doc => asArray(doc.authFullName_s))))];
     let authorIds = new Map();
     try {
-        authorIds = await fetchAuthorIdentityMap(authorNames);
+        onProgress?.({ phase: 'author-search', loaded: 0, total: 0 });
+        authorIds = await fetchAuthorIdentityMap(authorNames, (phase, loaded, total) => {
+            onProgress?.({
+                phase: phase === 'search' ? 'author-search' : 'author-aliases',
+                loaded,
+                total,
+            });
+        });
     } catch (err) {
         console.warn('Impossible de résoudre les identifiants auteurs HAL ; les noms restent affichés séparément.', err);
     }

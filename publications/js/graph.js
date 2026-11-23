@@ -149,11 +149,13 @@ export function renderGraph(container, graph, onSelect, infoBox) {
     network = new vis.Network(container, { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) }, {
         nodes: { shape: 'dot', scaling: { min: 8, max: 38 } },
         edges: { scaling: { min: 1, max: 8 }, smooth: false },
-        physics: { solver: 'forceAtlas2Based', stabilization: { iterations: 200 } },
+        physics: { solver: 'forceAtlas2Based', stabilization: { enabled: true, iterations: 200 } },
         interaction: { hover: true, tooltipDelay: 150 },
     });
+    const currentNetwork = network;
+    currentNetwork.on('stabilized', () => currentNetwork.setOptions({ physics: { enabled: false } }));
 
-    network.on('selectNode', (/** @type {{ nodes: string[] }} */ params) => {
+    currentNetwork.on('selectNode', (/** @type {{ nodes: string[] }} */ params) => {
         const node = byId.get(params.nodes[0]);
         if (!node) return;
         const co = (neighbours.get(node.id) ?? []).sort((a, b) => b[1] - a[1]).slice(0, 8);
@@ -164,5 +166,5 @@ export function renderGraph(container, graph, onSelect, infoBox) {
             h('button', { type: 'button', class: 'btn btn-sm btn-outline-secondary mt-2', text: 'Filtrer sur cet auteur', onclick: () => onSelect(node.id) }),
         );
     });
-    network.on('deselectNode', () => infoBox.replaceChildren());
+    currentNetwork.on('deselectNode', () => infoBox.replaceChildren());
 }

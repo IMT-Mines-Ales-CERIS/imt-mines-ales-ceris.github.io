@@ -87,8 +87,16 @@ async function load() {
     renderStructChips();
     setStatus('Chargement des publications depuis HAL…');
     try {
-        const { structures, publications } = await loadAll(app.structIds, (loaded, total) => {
-            if (token === app.loadToken) setStatus(`Chargement des publications depuis HAL… ${loaded} / ${total}`);
+        const { structures, publications } = await loadAll(app.structIds, progress => {
+            if (token !== app.loadToken) return;
+            if (progress.phase === 'publications') {
+                setStatus(`Chargement des publications depuis HAL… ${progress.loaded} / ${progress.total}`);
+            } else if (progress.phase === 'author-search') {
+                const detail = progress.total ? ` ${progress.loaded} / ${progress.total}` : '';
+                setStatus(`Identification des auteurs dans HAL…${detail}`);
+            } else {
+                setStatus(`Récupération des variantes de noms dans HAL… ${progress.loaded} / ${progress.total}`);
+            }
         });
         if (token !== app.loadToken) return;
         app.structures = structures;
