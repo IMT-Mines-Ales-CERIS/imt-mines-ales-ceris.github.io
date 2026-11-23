@@ -5,6 +5,15 @@ export const DEFAULT_STRUCT_IDS = [1451414, 1100796];
 
 export const HAL_API = 'https://api.archives-ouvertes.fr';
 
+/** Alias non reliés à un identifiant dans le référentiel d'auteurs HAL. */
+export const AUTHOR_ALIAS_GROUPS = [
+    {
+        key: 'hal:1240158',
+        name: 'Gustavo Andrade-Miranda',
+        aliases: ['G. Andrade-Miranda', 'G Andrade-Miranda', 'Gustavo Andrade-Miranda', 'Gustavo X Andrade-Miranda'],
+    },
+];
+
 /** Nombre de documents demandés par appel à l'API (HAL accepte jusqu'à 10000). */
 export const HAL_PAGE_ROWS = 500;
 

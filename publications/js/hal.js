@@ -1,10 +1,10 @@
 // @ts-check
 
-import { HAL_API, HAL_FIELDS, HAL_PAGE_ROWS } from './config.js';
+import { AUTHOR_ALIAS_GROUPS, HAL_API, HAL_FIELDS, HAL_PAGE_ROWS } from './config.js';
 import { normText, personKey } from './util.js';
 
 /**
- * @typedef {{ name: string, key: string }} Author
+ * @typedef {{ name: string, key: string, aliases: string[] }} Author
  * @typedef {Object} Publication
  * @property {string} id
  * @property {string} uri
@@ -96,11 +96,102 @@ export async function fetchStructDocs(structId, onProgress) {
 const asArray = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]).map(String);
 
 /**
+ * Résout les formes abrégées via le référentiel HAL, dont le docid porte l'identifiant auteur.
+ * @param {string[]} names
+ * @returns {Promise<Map<string, number>>} personKey -> identifiant HAL non ambigu
+ */
+export async function fetchAuthorIdentityMap(names) {
+    const initials = [...new Map(names
+        .filter(name => /(?:^|[\s.])[\p{L}]\./u.test(name))
+        .map(name => [personKey(name), name])).values()];
+    if (!initials.length) return new Map();
+
+    const identities = new Map();
+    const idsByName = new Map();
+    const batches = [];
+    for (let i = 0; i < initials.length; i += 50) batches.push(initials.slice(i, i + 50));
+
+    for (const batch of batches) {
+        const terms = batch.flatMap(name => {
+            const escaped = name.replace(/[\\"]/g, '\\$&');
+            const surname = name.trim().split(/\s+/).at(-1).replace(/[\\"]/g, '\\$&');
+            return [`fullName_s:"${escaped}"`, `lastName_s:"${surname}"`];
+        });
+        const params = new URLSearchParams({
+            q: `(${terms.join(' OR ')})`,
+            fl: 'docid,fullName_s,firstName_s,lastName_s',
+            rows: '10000',
+            wt: 'json',
+        });
+        const json = await getJson(`${HAL_API}/ref/author/?${params}`);
+        const requested = batch.map(name => {
+            const parts = name.trim().split(/\s+/);
+            return {
+                key: personKey(name),
+                initial: normText(parts[0]).replace(/[^a-z]/g, ''),
+                surname: personKey(parts.at(-1)),
+                exactIds: new Set(),
+                initialIds: new Set(),
+                prefixIds: new Set(),
+            };
+        });
+        for (const doc of json.response.docs) {
+            const match = String(doc.docid ?? '').match(/-(\d+)$/);
+            const id = match ? Number(match[1]) : 0;
+            if (!id) continue;
+            for (const author of requested) {
+                const firstName = normText(doc.firstName_s ?? '');
+                if (personKey(doc.fullName_s ?? '') === author.key) author.exactIds.add(id);
+                if (personKey(doc.lastName_s ?? '') !== author.surname || !firstName.startsWith(author.initial)) continue;
+                author.prefixIds.add(id);
+                if (firstName === author.initial) author.initialIds.add(id);
+            }
+        }
+        for (const author of requested) {
+            const ids = author.exactIds.size ? author.exactIds : author.initialIds.size ? author.initialIds : author.prefixIds;
+            if (ids.size) idsByName.set(author.key, ids);
+        }
+    }
+
+    const candidateIds = [...new Set([...idsByName.values()]
+        .filter(ids => ids.size === 1)
+        .map(ids => [...ids][0]))];
+    if (!candidateIds.length) return new Map();
+
+    const idBatches = [];
+    for (let i = 0; i < candidateIds.length; i += 50) idBatches.push(candidateIds.slice(i, i + 50));
+    for (const batch of idBatches) {
+        const terms = batch.map(id => `*-${id}`);
+        const params = new URLSearchParams({
+            q: `docid:(${terms.join(' OR ')})`,
+            fl: 'docid,fullName_s',
+            rows: '10000',
+            wt: 'json',
+        });
+        const json = await getJson(`${HAL_API}/ref/author/?${params}`);
+        for (const doc of json.response.docs) {
+            const nameKey = personKey(doc.fullName_s ?? '');
+            const match = String(doc.docid ?? '').match(/-(\d+)$/);
+            const id = match ? Number(match[1]) : 0;
+            if (!id) continue;
+            const ids = identities.get(nameKey) ?? new Set();
+            ids.add(id);
+            identities.set(nameKey, ids);
+        }
+    }
+
+    return new Map([...identities]
+        .filter(([, ids]) => ids.size === 1)
+        .map(([name, ids]) => [name, [...ids][0]]));
+}
+
+/**
  * Fusionne les documents venant de plusieurs structures et uniformise auteurs / mots-clés.
  * @param {{ structId: number, docs: any[] }[]} results
+ * @param {Map<string, number>} [halAuthorIds] personKey -> identifiant HAL
  * @returns {Publication[]}
  */
-export function buildPublications(results) {
+export function buildPublications(results, halAuthorIds = new Map()) {
     /** @type {Map<string, { doc: any, structs: Set<number> }>} */
     const merged = new Map();
     for (const { structId, docs } of results) {
@@ -116,8 +207,23 @@ export function buildPublications(results) {
     // Forme d'affichage la plus fréquente pour chaque auteur / mot-clé (variantes de casse, ordre, accents).
     /** @type {Map<string, Map<string, number>>} */
     const authorForms = new Map();
+    /** @type {Map<string, Set<string>>} */
+    const authorAliases = new Map();
     /** @type {Map<string, Map<string, number>>} */
     const keywordForms = new Map();
+    const aliasKeys = new Map();
+    const aliasNames = new Map();
+    for (const group of AUTHOR_ALIAS_GROUPS) {
+        aliasNames.set(group.key, group.name);
+        for (const alias of group.aliases) aliasKeys.set(personKey(alias), group.key);
+    }
+    /** @param {string} name */
+    const authorKey = name => {
+        const normalized = personKey(name);
+        return aliasKeys.get(normalized) ?? (halAuthorIds.has(normalized)
+            ? `hal:${halAuthorIds.get(normalized)}`
+            : normalized);
+    };
     /** @param {Map<string, Map<string, number>>} store @param {string} key @param {string} form */
     const count = (store, key, form) => {
         const forms = store.get(key) ?? new Map();
@@ -128,7 +234,13 @@ export function buildPublications(results) {
     const best = forms => [...forms.entries()].sort((a, b) => b[1] - a[1])[0][0];
 
     for (const { doc } of merged.values()) {
-        for (const a of asArray(doc.authFullName_s)) count(authorForms, personKey(a), a.trim());
+        for (const a of asArray(doc.authFullName_s)) {
+            const key = authorKey(a);
+            count(authorForms, key, a.trim());
+            const aliases = authorAliases.get(key) ?? new Set();
+            aliases.add(a.trim());
+            authorAliases.set(key, aliases);
+        }
         for (const k of asArray(doc.keyword_s)) count(keywordForms, normText(k), k.trim());
     }
 
@@ -139,10 +251,19 @@ export function buildPublications(results) {
         /** @type {Author[]} */
         const authors = [];
         for (const raw of asArray(doc.authFullName_s)) {
-            const key = personKey(raw);
+            const key = authorKey(raw);
             if (!key || seenAuthors.has(key)) continue;
             seenAuthors.add(key);
-            authors.push({ key, name: best(/** @type {Map<string, number>} */ (authorForms.get(key))) });
+            const forms = /** @type {Map<string, number>} */ (authorForms.get(key));
+            const name = aliasNames.get(key) ?? (key.startsWith('hal:')
+                ? [...forms.entries()].sort((a, b) => {
+                    const abbreviated = value => /(?:^|[\s.])[\p{L}]\./u.test(value);
+                    return Number(abbreviated(a[0])) - Number(abbreviated(b[0]))
+                        || b[1] - a[1]
+                        || b[0].length - a[0].length;
+                })[0][0]
+                : best(forms));
+            authors.push({ key, name, aliases: [...(authorAliases.get(key) ?? [])] });
         }
 
         const seenKeywords = new Set();
@@ -200,5 +321,13 @@ export async function loadAll(structIds, onProgress) {
             return { structId, docs };
         })),
     ]);
-    return { structures, publications: buildPublications(results) };
+    const authorNames = [...new Set(results.flatMap(({ docs }) =>
+        docs.flatMap(doc => asArray(doc.authFullName_s))))];
+    let authorIds = new Map();
+    try {
+        authorIds = await fetchAuthorIdentityMap(authorNames);
+    } catch (err) {
+        console.warn('Impossible de résoudre les identifiants auteurs HAL ; les noms restent affichés séparément.', err);
+    }
+    return { structures, publications: buildPublications(results, authorIds) };
 }

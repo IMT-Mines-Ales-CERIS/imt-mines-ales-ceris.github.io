@@ -43,7 +43,9 @@ export function matches(pub, f) {
     }
     for (const term of f.authors) {
         const tokens = term.key.split(' ');
-        const ok = pub.authors.some(a => term.exact ? a.key === term.key : tokens.every(t => a.key.includes(t)));
+        const ok = pub.authors.some(a => term.exact
+            ? a.key === term.key
+            : [a.key, ...a.aliases.map(personKey)].some(key => tokens.every(t => key.includes(t))));
         if (!ok) return false;
     }
     for (const term of f.keywords) {
@@ -74,6 +76,8 @@ export class FilterPanel {
         this.state = emptyFilters();
         /** @type {Map<string, string>} clé auteur -> nom affiché */
         this.knownAuthors = new Map();
+        /** @type {Map<string, string>} nom ou alias normalisé -> clé auteur */
+        this.knownAuthorKeys = new Map();
         /** @type {Map<string, string>} mot-clé normalisé -> affiché */
         this.knownKeywords = new Map();
         /** @type {Publication[]} */
@@ -131,13 +135,17 @@ export class FilterPanel {
         this.state = emptyFilters();
 
         this.knownAuthors.clear();
+        this.knownAuthorKeys.clear();
         this.knownKeywords.clear();
         const venues = new Set();
         const years = new Set();
         /** @type {Map<string, number>} */
         const typeCounts = new Map();
         for (const p of pubs) {
-            for (const a of p.authors) this.knownAuthors.set(a.key, a.name);
+            for (const a of p.authors) {
+                this.knownAuthors.set(a.key, a.name);
+                for (const name of [a.name, ...a.aliases]) this.knownAuthorKeys.set(personKey(name), a.key);
+            }
             for (const k of p.keywords) this.knownKeywords.set(normText(k), k);
             if (p.venue) venues.add(p.venue);
             if (p.year !== null) years.add(p.year);
@@ -230,10 +238,12 @@ export class FilterPanel {
 
     /** @param {string} input */
     addAuthor(input) {
-        const key = personKey(input);
+        const inputKey = personKey(input);
+        const knownKey = this.knownAuthorKeys.get(inputKey);
+        const key = knownKey ?? inputKey;
         if (!key || this.state.authors.some(a => a.key === key)) return;
         const known = this.knownAuthors.get(key);
-        this.state.authors.push({ label: known ?? input.trim(), key, exact: known !== undefined });
+        this.state.authors.push({ label: known ?? input.trim(), key, exact: knownKey !== undefined });
         this.#syncUi();
         this.onChange();
     }
