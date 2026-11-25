@@ -7,28 +7,39 @@ import { h } from './util.js';
  * @typedef {import('./hal.js').Publication} Publication
  * @typedef {{ id: string, name: string, count: number, group: number, degree: number }} GraphNode
  * @typedef {{ from: string, to: string, weight: number }} GraphEdge
- * @typedef {{ minPubs: number, maxNodes: number, minWeight: number, maxAuthorsPerPub: number }} GraphOptions
+ * @typedef {{ minPubs: number, maxNodes: number, minWeight: number, maxItemsPerPub: number }} GraphOptions
+ * @typedef {{ key: string, name: string }} GraphItem
+ * @typedef {{
+ *   nodeTooltip: (n: GraphNode) => string,
+ *   edgeTooltip: (weight: number) => string,
+ *   neighbourSummary: (n: GraphNode) => string,
+ *   neighboursLabel: string,
+ *   filterLabel: string,
+ * }} GraphLabels
  */
 
+const SEP = '\u0001';
+
 /**
- * Réseau de co-signatures : un nœud par auteur, une arête par paire d'auteurs ayant publié ensemble.
- * Les publications à très nombreuses signatures sont ignorées pour les arêtes (elles forment des cliques peu informatives).
+ * Réseau de co-occurrence : un nœud par élément (auteur, mot-clé…), une arête par paire d'éléments présents dans une même publication.
+ * Les publications comportant très nombreux éléments sont ignorées pour les arêtes (elles forment des cliques peu informatives).
  * @param {Publication[]} pubs
+ * @param {(pub: Publication) => GraphItem[]} itemsOf éléments distincts d'une publication
  * @param {GraphOptions} opts
  * @returns {{ nodes: GraphNode[], edges: GraphEdge[] }}
  */
-export function buildGraph(pubs, opts) {
+function buildCooccurrenceGraph(pubs, itemsOf, opts) {
     /** @type {Map<string, { name: string, count: number }>} */
-    const authors = new Map();
+    const items = new Map();
     for (const p of pubs) {
-        for (const a of p.authors) {
-            const entry = authors.get(a.key) ?? { name: a.name, count: 0 };
+        for (const it of itemsOf(p)) {
+            const entry = items.get(it.key) ?? { name: it.name, count: 0 };
             entry.count++;
-            authors.set(a.key, entry);
+            items.set(it.key, entry);
         }
     }
 
-    const kept = new Set([...authors.entries()]
+    const kept = new Set([...items.entries()]
         .filter(([, a]) => a.count >= opts.minPubs)
         .sort((a, b) => b[1].count - a[1].count || a[1].name.localeCompare(b[1].name))
         .slice(0, opts.maxNodes)
@@ -37,11 +48,12 @@ export function buildGraph(pubs, opts) {
     /** @type {Map<string, number>} */
     const weights = new Map();
     for (const p of pubs) {
-        if (p.authors.length > opts.maxAuthorsPerPub) continue;
-        const keys = p.authors.map(a => a.key).filter(k => kept.has(k)).sort();
+        const all = itemsOf(p);
+        if (all.length > opts.maxItemsPerPub) continue;
+        const keys = all.map(a => a.key).filter(k => kept.has(k)).sort();
         for (let i = 0; i < keys.length; i++) {
             for (let j = i + 1; j < keys.length; j++) {
-                const id = `${keys[i]}|${keys[j]}`;
+                const id = `${keys[i]}${SEP}${keys[j]}`;
                 weights.set(id, (weights.get(id) ?? 0) + 1);
             }
         }
@@ -53,7 +65,7 @@ export function buildGraph(pubs, opts) {
     const degree = new Map();
     for (const [id, weight] of weights) {
         if (weight < opts.minWeight) continue;
-        const [from, to] = id.split('|');
+        const [from, to] = id.split(SEP);
         edges.push({ from, to, weight });
         degree.set(from, (degree.get(from) ?? 0) + 1);
         degree.set(to, (degree.get(to) ?? 0) + 1);
@@ -63,11 +75,47 @@ export function buildGraph(pubs, opts) {
     const groups = detectCommunities(ids, edges);
     /** @type {GraphNode[]} */
     const nodes = ids.map(id => {
-        const a = /** @type {{ name: string, count: number }} */ (authors.get(id));
+        const a = /** @type {{ name: string, count: number }} */ (items.get(id));
         return { id, name: a.name, count: a.count, group: groups.get(id) ?? 0, degree: degree.get(id) ?? 0 };
     });
     return { nodes, edges };
 }
+
+/**
+ * Réseau de co-signatures : un nœud par auteur, une arête par paire d'auteurs ayant publié ensemble.
+ * @param {Publication[]} pubs
+ * @param {GraphOptions} opts
+ */
+export function buildGraph(pubs, opts) {
+    return buildCooccurrenceGraph(pubs, p => p.authors, opts);
+}
+
+/**
+ * Réseau de mots-clés : une arête par paire de mots-clés associés à une même publication.
+ * @param {Publication[]} pubs
+ * @param {GraphOptions} opts
+ */
+export function buildKeywordGraph(pubs, opts) {
+    return buildCooccurrenceGraph(pubs, p => p.keywords.map(k => ({ key: k, name: k })), opts);
+}
+
+/** @type {GraphLabels} */
+export const AUTHOR_LABELS = {
+    nodeTooltip: n => `${n.name} — ${n.count} publication(s), ${n.degree} co-auteur(s)`,
+    edgeTooltip: w => `${w} publication(s) en commun`,
+    neighbourSummary: n => `${n.count} publication(s) · ${n.degree} co-auteur(s) affichés`,
+    neighboursLabel: 'Principaux co-auteurs : ',
+    filterLabel: 'Filtrer sur cet auteur',
+};
+
+/** @type {GraphLabels} */
+export const KEYWORD_LABELS = {
+    nodeTooltip: n => `${n.name} — ${n.count} publication(s), associé à ${n.degree} mot(s)-clé(s)`,
+    edgeTooltip: w => `${w} publication(s) avec ces deux mots-clés`,
+    neighbourSummary: n => `${n.count} publication(s) · ${n.degree} mot(s)-clé(s) associés affichés`,
+    neighboursLabel: 'Mots-clés les plus associés : ',
+    filterLabel: 'Filtrer sur ce mot-clé',
+};
 
 /**
  * Propagation d'étiquettes (déterministe) pour colorer les groupes d'auteurs qui collaborent beaucoup.
@@ -106,18 +154,19 @@ export function detectCommunities(ids, edges) {
     return new Map([...label.entries()].map(([id, l]) => [id, order.indexOf(l)]));
 }
 
-/** @type {any} */
-let network = null;
+/** @type {WeakMap<HTMLElement, any>} un réseau vis par conteneur */
+const networks = new WeakMap();
 
 /**
  * @param {HTMLElement} container
  * @param {{ nodes: GraphNode[], edges: GraphEdge[] }} graph
- * @param {(authorKey: string) => void} onSelect
+ * @param {(nodeId: string) => void} onSelect
  * @param {HTMLElement} infoBox
+ * @param {GraphLabels} [labels]
  */
-export function renderGraph(container, graph, onSelect, infoBox) {
-    network?.destroy();
-    network = null;
+export function renderGraph(container, graph, onSelect, infoBox, labels = AUTHOR_LABELS) {
+    networks.get(container)?.destroy();
+    networks.delete(container);
     infoBox.replaceChildren();
     if (!graph.nodes.length) return;
 
@@ -135,24 +184,24 @@ export function renderGraph(container, graph, onSelect, infoBox) {
         id: n.id,
         label: n.name,
         value: n.count,
-        title: h('div', { text: `${n.name} — ${n.count} publication(s), ${n.degree} co-auteur(s)` }),
+        title: h('div', { text: labels.nodeTooltip(n) }),
         color: { background: PALETTE[n.group % PALETTE.length], border: '#ffffff', highlight: { background: '#ff7c4d', border: '#153a43' } },
         font: { color: '#153a43', size: 13 },
     }));
     const edges = graph.edges.map(e => ({
         from: e.from, to: e.to, value: e.weight,
-        title: h('div', { text: `${e.weight} publication(s) en commun` }),
+        title: h('div', { text: labels.edgeTooltip(e.weight) }),
         color: { color: 'rgba(21,58,67,0.25)', highlight: '#ff7c4d' },
     }));
 
     // @ts-ignore vis est fourni par le CDN
-    network = new vis.Network(container, { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) }, {
+    const currentNetwork = new vis.Network(container, { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) }, {
         nodes: { shape: 'dot', scaling: { min: 8, max: 38 } },
         edges: { scaling: { min: 1, max: 8 }, smooth: false },
         physics: { solver: 'forceAtlas2Based', stabilization: { enabled: true, iterations: 200 } },
         interaction: { hover: true, tooltipDelay: 150 },
     });
-    const currentNetwork = network;
+    networks.set(container, currentNetwork);
     currentNetwork.on('stabilized', () => currentNetwork.setOptions({ physics: { enabled: false } }));
 
     currentNetwork.on('selectNode', (/** @type {{ nodes: string[] }} */ params) => {
@@ -161,9 +210,9 @@ export function renderGraph(container, graph, onSelect, infoBox) {
         const co = (neighbours.get(node.id) ?? []).sort((a, b) => b[1] - a[1]).slice(0, 8);
         infoBox.replaceChildren(
             h('strong', { text: node.name }),
-            h('span', { class: 'text-muted ms-2', text: `${node.count} publication(s) · ${node.degree} co-auteur(s) affichés` }),
-            h('div', { class: 'small mt-1', text: 'Principaux co-auteurs : ' + co.map(([id, w]) => `${byId.get(id)?.name} (${w})`).join(', ') }),
-            h('button', { type: 'button', class: 'btn btn-sm btn-outline-secondary mt-2', text: 'Filtrer sur cet auteur', onclick: () => onSelect(node.id) }),
+            h('span', { class: 'text-muted ms-2', text: labels.neighbourSummary(node) }),
+            h('div', { class: 'small mt-1', text: labels.neighboursLabel + co.map(([id, w]) => `${byId.get(id)?.name} (${w})`).join(', ') }),
+            h('button', { type: 'button', class: 'btn btn-sm btn-outline-secondary mt-2', text: labels.filterLabel, onclick: () => onSelect(node.id) }),
         );
     });
     currentNetwork.on('deselectNode', () => infoBox.replaceChildren());

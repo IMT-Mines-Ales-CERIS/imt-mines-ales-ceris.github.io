@@ -17,6 +17,8 @@ import { normText, personKey } from './util.js';
  * @property {'conference'|'journal'|null} venueKind
  * @property {string} docType
  * @property {number[]} structs           structures HAL (parmi celles demandées) contenant ce document
+ * @property {number[]} affiliationIds   structures associées aux auteurs dans cette publication
+ * @property {boolean} incompleteAffiliations  au moins un auteur sans affiliation exploitable
  * @property {string} searchText          titre + résumé normalisés, pour la recherche
  *
  * @typedef {{ id: number, label: string, acronym: string }} Structure
@@ -94,6 +96,58 @@ export async function fetchStructDocs(structId, onProgress) {
 
 /** @param {any} v @returns {string[]} */
 const asArray = v => (v === undefined || v === null ? [] : Array.isArray(v) ? v : [v]).map(String);
+
+/**
+ * @param {string[]} authorForms
+ * @param {string[]} links
+ * @param {number} [authorCount]
+ * @returns {{ affiliationIds: number[], incompleteAffiliations: boolean }}
+ */
+export function extractAffiliations(authorForms, links, authorCount = authorForms.length) {
+    /** @type {Set<string>} */
+    const authorIds = new Set();
+    let incomplete = !authorForms.length || authorForms.length < authorCount;
+    for (const form of authorForms) {
+        const id = form.match(/_FacetSep_(.+)$/)?.[1];
+        if (id) authorIds.add(id);
+        else incomplete = true;
+    }
+    const linkedAuthors = new Set();
+    const affiliationIds = new Set();
+    for (const link of links) {
+        const match = link.match(/^(.+?)_FacetSep_.*?_JoinSep_(\d+)_FacetSep_/);
+        if (!match || Number(match[2]) === 0) { incomplete = true; continue; }
+        linkedAuthors.add(match[1]);
+        affiliationIds.add(Number(match[2]));
+    }
+    return {
+        affiliationIds: [...affiliationIds],
+        incompleteAffiliations: incomplete || [...authorIds].some(id => !linkedAuthors.has(id)),
+    };
+}
+
+/**
+ * @param {number[]} ids
+ * @returns {Promise<Map<number, string>>}
+ */
+export async function fetchAffiliationCountries(ids) {
+    /** @type {Map<number, string>} */
+    const countries = new Map();
+    for (let i = 0; i < ids.length; i += 100) {
+        const batch = ids.slice(i, i + 100);
+        const params = new URLSearchParams({
+            q: `docid:(${batch.join(' OR ')})`,
+            fl: 'docid,country_s',
+            rows: String(batch.length),
+            wt: 'json',
+        });
+        const json = await getJson(`${HAL_API}/ref/structure/?${params}`);
+        for (const doc of json.response.docs) {
+            if (doc.country_s) countries.set(Number(doc.docid), String(doc.country_s).toUpperCase());
+        }
+    }
+    return countries;
+}
 
 /**
  * Résout les formes abrégées via le référentiel HAL, dont le docid porte l'identifiant auteur.
@@ -306,6 +360,7 @@ export function buildPublications(results, halAuthorIds = new Map()) {
             venueKind: conference ? 'conference' : journal ? 'journal' : null,
             docType: doc.docType_s ?? 'UNDEFINED',
             structs: [...structs],
+            ...extractAffiliations(asArray(doc.authFullNameIdFormPerson_fs), asArray(doc.authIdHasStructure_fs), asArray(doc.authFullName_s).length),
             searchText: normText(`${title} ${abstract}`),
         });
     }

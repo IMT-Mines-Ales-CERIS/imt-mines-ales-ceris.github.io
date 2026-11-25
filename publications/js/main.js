@@ -2,10 +2,11 @@
 
 import { DEFAULT_STRUCT_IDS, PAGE_SIZE, docTypeLabel } from './config.js';
 import { FilterPanel, isActive } from './filters.js';
-import { buildGraph, renderGraph } from './graph.js';
+import { AUTHOR_LABELS, KEYWORD_LABELS, buildGraph, buildKeywordGraph, renderGraph } from './graph.js';
 import { loadAll, parseStructIds } from './hal.js';
 import { renderCharts } from './charts.js';
 import { computeStats } from './stats.js';
+import { countCountries, loadCountryData, renderCountries } from './countries.js';
 import { debounce, h } from './util.js';
 
 /** @typedef {import('./hal.js').Publication} Publication */
@@ -28,8 +29,12 @@ const app = {
     page: 0,
     loadToken: 0,
     /** @type {Set<string>} vues à recalculer lors de leur prochain affichage */
-    dirty: new Set(['stats', 'graph']),
+    dirty: new Set(['stats', 'graph', 'kwgraph', 'countries']),
 };
+
+/** @type {ReturnType<typeof loadCountryData>|null} */
+let countryData = null;
+let countryRenderToken = 0;
 
 /* ---------- Structures (identifiants HAL) ---------- */
 
@@ -84,6 +89,7 @@ function setStatus(message, kind = 'info') {
 
 async function load() {
     const token = ++app.loadToken;
+    countryRenderToken++;
     renderStructChips();
     setStatus('Chargement des publications depuis HAL…');
     try {
@@ -101,6 +107,8 @@ async function load() {
         if (token !== app.loadToken) return;
         app.structures = structures;
         app.all = publications;
+        countryData = null;
+        countryRenderToken++;
         renderStructChips();
         filters.setData(publications, structures);
         setStatus(publications.length ? null : 'Aucune publication trouvée pour ces structures.', 'info');
@@ -119,7 +127,7 @@ const filters = new FilterPanel(() => refresh());
 function refresh() {
     app.filtered = filters.apply(app.all);
     app.page = 0;
-    app.dirty.add('stats').add('graph');
+    app.dirty.add('stats').add('graph').add('kwgraph').add('countries');
     renderKpis();
     renderList();
     renderActiveView();
@@ -216,7 +224,32 @@ function renderActiveView() {
     if (!view || !app.dirty.has(view)) return;
     if (view === 'stats') renderStatsView();
     else if (view === 'graph') renderGraphView();
+    else if (view === 'kwgraph') renderKeywordGraphView();
+    else if (view === 'countries') renderCountriesView();
     app.dirty.delete(view);
+}
+
+async function renderCountriesView() {
+    const token = ++countryRenderToken;
+    $('countries-status').textContent = 'Chargement des affiliations et de la carte…';
+    $('countries-map').replaceChildren();
+    $('countries-legend').replaceChildren();
+    $('countries-list').replaceChildren();
+    const data = countryData ?? (countryData = loadCountryData(app.all));
+    try {
+        const { countries, topology, isoCodes } = await data;
+        if (token !== countryRenderToken) return;
+        const { counts, incomplete } = countCountries(app.filtered, countries);
+        $('countries-status').textContent = `${incomplete} publication(s) sur ${app.filtered.length} présentent au moins une affiliation ou un pays manquant ; les résultats peuvent être incomplets.`;
+        renderCountries($('countries-map'), $('countries-legend'), $('countries-list'), counts, topology, isoCodes);
+    } catch (err) {
+        if (token !== countryRenderToken) return;
+        console.error('Impossible de charger la carte des pays partenaires.', err);
+        if (countryData === data) countryData = null;
+        $('countries-status').replaceChildren(
+            h('span', { class: 'text-danger', text: `Impossible de charger la carte : ${err instanceof Error ? err.message : err} ` }),
+            h('button', { type: 'button', class: 'btn btn-sm btn-outline-secondary', text: 'Réessayer', onclick: () => { app.dirty.add('countries'); renderActiveView(); } }));
+    }
 }
 
 function renderStatsView() {
@@ -232,7 +265,7 @@ function renderStatsView() {
         onType: t => filters.toggleType(t),
         onAuthor: key => filters.addAuthor(stats.authorNames.get(key) ?? key),
         onKeyword: k => filters.addKeyword(k),
-        onVenue: v => filters.setVenue(v),
+        onVenue: v => filters.addVenue(v),
     });
 }
 
@@ -243,7 +276,7 @@ function renderGraphView() {
         minPubs: num('g-min-pubs', 2),
         maxNodes: num('g-max-nodes', 80),
         minWeight: num('g-min-weight', 1),
-        maxAuthorsPerPub: num('g-max-authors', 30),
+        maxItemsPerPub: num('g-max-authors', 30),
     });
     $('graph-summary').textContent = graph.nodes.length
         ? `${graph.nodes.length} auteurs, ${graph.edges.length} liens. Taille = nombre de publications, épaisseur = co-publications, couleur = groupe de collaboration.`
@@ -251,11 +284,32 @@ function renderGraphView() {
     renderGraph($('graph'), graph, key => {
         const node = graph.nodes.find(n => n.id === key);
         if (node) filters.addAuthor(node.name);
-    }, $('graph-info'));
+    }, $('graph-info'), AUTHOR_LABELS);
+}
+
+function renderKeywordGraphView() {
+    /** @param {string} id @param {number} fallback */
+    const num = (id, fallback) => Math.max(1, Math.floor(Number($input(id).value)) || fallback);
+    const graph = buildKeywordGraph(app.filtered, {
+        minPubs: num('k-min-pubs', 2),
+        maxNodes: num('k-max-nodes', 80),
+        minWeight: num('k-min-weight', 1),
+        maxItemsPerPub: num('k-max-keywords', 15),
+    });
+    $('kwgraph-summary').textContent = graph.nodes.length
+        ? `${graph.nodes.length} mots-clés, ${graph.edges.length} liens. Taille = nombre de publications, épaisseur = publications partagées, couleur = thématique.`
+        : "Aucun lien à afficher avec ces réglages : essayez d'abaisser les seuils.";
+    renderGraph($('kwgraph'), graph, key => {
+        const node = graph.nodes.find(n => n.id === key);
+        if (node) filters.addKeyword(node.name);
+    }, $('kwgraph-info'), KEYWORD_LABELS);
 }
 
 for (const id of ['g-min-pubs', 'g-max-nodes', 'g-min-weight', 'g-max-authors']) {
     $input(id).addEventListener('input', debounce(() => { app.dirty.add('graph'); renderActiveView(); }, 300));
+}
+for (const id of ['k-min-pubs', 'k-max-nodes', 'k-min-weight', 'k-max-keywords']) {
+    $input(id).addEventListener('input', debounce(() => { app.dirty.add('kwgraph'); renderActiveView(); }, 300));
 }
 
 document.querySelectorAll('#view-tabs [data-bs-toggle="tab"]').forEach(tab =>

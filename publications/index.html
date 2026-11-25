@@ -10,6 +10,8 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
     <script src="js/main.js" type="module"></script>
 </head>
 <body>
@@ -55,15 +57,31 @@
                     <input id="f-author" class="form-control form-control-sm" list="dl-authors" placeholder="Nom ou prénom">
                     <datalist id="dl-authors"></datalist>
                     <div id="chips-authors" class="d-flex flex-wrap gap-1 my-2"></div>
+                    <fieldset id="mode-authors" class="mb-3 small" hidden>
+                        <legend class="form-label small fw-semibold mb-1">Correspondance des auteurs</legend>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="authors-mode" id="authors-all" value="all" checked><label class="form-check-label" for="authors-all">Tous (ET)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="authors-mode" id="authors-any" value="any"><label class="form-check-label" for="authors-any">Au moins un (OU)</label></div>
+                    </fieldset>
 
                     <label class="form-label small fw-semibold" for="f-keyword">Mot-clé <span class="text-muted fw-normal">(Entrée pour ajouter)</span></label>
                     <input id="f-keyword" class="form-control form-control-sm" list="dl-keywords" placeholder="ex. machine learning">
                     <datalist id="dl-keywords"></datalist>
                     <div id="chips-keywords" class="d-flex flex-wrap gap-1 my-2"></div>
+                    <fieldset id="mode-keywords" class="mb-3 small" hidden>
+                        <legend class="form-label small fw-semibold mb-1">Correspondance des mots-clés</legend>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="keywords-mode" id="keywords-all" value="all" checked><label class="form-check-label" for="keywords-all">Tous (ET)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="keywords-mode" id="keywords-any" value="any"><label class="form-check-label" for="keywords-any">Au moins un (OU)</label></div>
+                    </fieldset>
 
-                    <label class="form-label small fw-semibold" for="f-venue">Conférence / revue</label>
-                    <input id="f-venue" class="form-control form-control-sm mb-3" list="dl-venues" placeholder="ex. ICML">
+                    <label class="form-label small fw-semibold" for="f-venue">Conférence / revue <span class="text-muted fw-normal">(Entrée pour ajouter)</span></label>
+                    <input id="f-venue" class="form-control form-control-sm" list="dl-venues" placeholder="ex. ICML">
                     <datalist id="dl-venues"></datalist>
+                    <div id="chips-venues" class="d-flex flex-wrap gap-1 my-2"></div>
+                    <fieldset id="mode-venues" class="mb-3 small" hidden>
+                        <legend class="form-label small fw-semibold mb-1">Correspondance des conférences / revues</legend>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="venues-mode" id="venues-all" value="all" checked><label class="form-check-label" for="venues-all">Toutes (ET)</label></div>
+                        <div class="form-check"><input class="form-check-input" type="radio" name="venues-mode" id="venues-any" value="any"><label class="form-check-label" for="venues-any">Au moins une (OU)</label></div>
+                    </fieldset>
 
                     <div class="row g-2 mb-3">
                         <div class="col-6">
@@ -96,6 +114,8 @@
                     <li class="nav-item"><button class="nav-link active" data-view="list" data-bs-toggle="tab" data-bs-target="#view-list" type="button" role="tab">Publications <span id="count-badge" class="badge base-badge ms-1">0</span></button></li>
                     <li class="nav-item"><button class="nav-link" data-view="stats" data-bs-toggle="tab" data-bs-target="#view-stats" type="button" role="tab">Statistiques</button></li>
                     <li class="nav-item"><button class="nav-link" data-view="graph" data-bs-toggle="tab" data-bs-target="#view-graph" type="button" role="tab">Réseau d'auteurs</button></li>
+                    <li class="nav-item"><button class="nav-link" data-view="kwgraph" data-bs-toggle="tab" data-bs-target="#view-kwgraph" type="button" role="tab">Réseau de mots-clés</button></li>
+                    <li class="nav-item"><button class="nav-link" data-view="countries" data-bs-toggle="tab" data-bs-target="#view-countries" type="button" role="tab">Pays partenaires</button></li>
                 </ul>
 
                 <div class="tab-content">
@@ -148,6 +168,43 @@
                         <div class="text-muted small mb-2" id="graph-summary"></div>
                         <div id="graph" class="graph-box base-radius-16 base-shadow"></div>
                         <div id="graph-info" class="mt-3"></div>
+                    </div>
+
+                    <div class="tab-pane fade" id="view-kwgraph" role="tabpanel">
+                        <div class="graph-controls base-radius-16 base-shadow p-3 mb-3">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="k-min-pubs">Publications min. / mot-clé</label>
+                                    <input id="k-min-pubs" class="form-control form-control-sm" type="number" min="1" value="2">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="k-max-nodes">Mots-clés affichés (max)</label>
+                                    <input id="k-max-nodes" class="form-control form-control-sm" type="number" min="5" max="500" value="80">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="k-min-weight">Co-occurrences min. / lien</label>
+                                    <input id="k-min-weight" class="form-control form-control-sm" type="number" min="1" value="1">
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <label class="form-label small fw-semibold" for="k-max-keywords">Ignorer si plus de N mots-clés</label>
+                                    <input id="k-max-keywords" class="form-control form-control-sm" type="number" min="2" value="15">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-muted small mb-2" id="kwgraph-summary"></div>
+                        <div id="kwgraph" class="graph-box base-radius-16 base-shadow"></div>
+                        <div id="kwgraph-info" class="mt-3"></div>
+                    </div>
+
+                    <div class="tab-pane fade" id="view-countries" role="tabpanel">
+                        <div class="chart-card base-radius-16 base-shadow p-3">
+                            <h3 class="h6 fw-bold">Pays des affiliations partenaires</h3>
+                            <p class="text-muted small">Une publication est comptée une fois par pays d'affiliation hors France et territoires français, quel que soit le nombre d'auteurs ou de structures. Il ne s'agit pas de la nationalité des auteurs.</p>
+                            <div id="countries-status" role="status" class="small mb-2"></div>
+                            <div id="countries-map" class="countries-map"></div>
+                            <div id="countries-legend" class="small text-muted mt-2"></div>
+                            <div id="countries-list" class="mt-3"></div>
+                        </div>
                     </div>
                 </div>
             </section>

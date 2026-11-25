@@ -8,9 +8,14 @@ import { debounce, h, normText, personKey } from './util.js';
  * @typedef {import('./hal.js').Structure} Structure
  * @typedef {{ label: string, key: string, exact: boolean }} AuthorTerm
  * @typedef {{ label: string, norm: string, exact: boolean }} KeywordTerm
+ * @typedef {'all'|'any'} MatchMode
  * @typedef {Object} FilterState
  * @property {string} text
  * @property {string} venue
+ * @property {string[]} venues
+ * @property {MatchMode} authorsMode
+ * @property {MatchMode} keywordsMode
+ * @property {MatchMode} venuesMode
  * @property {number|null} yearMin
  * @property {number|null} yearMax
  * @property {Set<string>} types
@@ -21,7 +26,18 @@ import { debounce, h, normText, personKey } from './util.js';
 
 /** @returns {FilterState} */
 export function emptyFilters() {
-    return { text: '', venue: '', yearMin: null, yearMax: null, types: new Set(), structs: new Set(), authors: [], keywords: [] };
+    return { text: '', venue: '', venues: [], authorsMode: 'all', keywordsMode: 'all', venuesMode: 'all',
+        yearMin: null, yearMax: null, types: new Set(), structs: new Set(), authors: [], keywords: [] };
+}
+
+/**
+ * @template T
+ * @param {T[]} terms
+ * @param {MatchMode} mode
+ * @param {(term: T) => boolean} predicate
+ */
+function matchesTerms(terms, mode, predicate) {
+    return !terms.length || (mode === 'any' ? terms.some(predicate) : terms.every(predicate));
 }
 
 /**
@@ -38,29 +54,26 @@ export function matches(pub, f) {
         const tokens = normText(f.text).split(' ').filter(Boolean);
         if (!tokens.every(t => pub.searchText.includes(t))) return false;
     }
-    if (f.venue) {
-        if (!pub.venue || !normText(pub.venue).includes(normText(f.venue))) return false;
-    }
-    for (const term of f.authors) {
+    const venues = f.venue ? [...f.venues, f.venue] : f.venues;
+    if (!matchesTerms(venues, f.venuesMode, venue =>
+        !!pub.venue && normText(pub.venue).includes(normText(venue)))) return false;
+    if (!matchesTerms(f.authors, f.authorsMode, term => {
         const tokens = term.key.split(' ');
-        const ok = pub.authors.some(a => term.exact
+        return pub.authors.some(a => term.exact
             ? a.key === term.key
             : [a.key, ...a.aliases.map(personKey)].some(key => tokens.every(t => key.includes(t))));
-        if (!ok) return false;
-    }
-    for (const term of f.keywords) {
-        const ok = pub.keywords.some(k => {
+    })) return false;
+    if (!matchesTerms(f.keywords, f.keywordsMode, term =>
+        pub.keywords.some(k => {
             const n = normText(k);
             return term.exact ? n === term.norm : n.includes(term.norm);
-        });
-        if (!ok) return false;
-    }
+        }))) return false;
     return true;
 }
 
 /** @param {FilterState} f */
 export function isActive(f) {
-    return !!(f.text || f.venue || f.yearMin !== null || f.yearMax !== null || f.types.size
+    return !!(f.text || f.venue || f.venues.length || f.yearMin !== null || f.yearMax !== null || f.types.size
         || f.structs.size || f.authors.length || f.keywords.length);
 }
 
@@ -91,7 +104,11 @@ export class FilterPanel {
             text: $('f-text'), author: $('f-author'), keyword: $('f-keyword'), venue: $('f-venue'),
             yearMin: $('f-year-min'), yearMax: $('f-year-max'),
             types: $('f-types'), structs: $('f-structs'), structsGroup: $('f-structs-group'),
-            chipsAuthors: $('chips-authors'), chipsKeywords: $('chips-keywords'),
+            chipsAuthors: $('chips-authors'), chipsKeywords: $('chips-keywords'), chipsVenues: $('chips-venues'),
+            modeAuthors: $('mode-authors'), modeKeywords: $('mode-keywords'), modeVenues: $('mode-venues'),
+            authorsAll: $('authors-all'), authorsAny: $('authors-any'),
+            keywordsAll: $('keywords-all'), keywordsAny: $('keywords-any'),
+            venuesAll: $('venues-all'), venuesAny: $('venues-any'),
             dlAuthors: $('dl-authors'), dlKeywords: $('dl-keywords'), dlVenues: $('dl-venues'),
             reset: $('f-reset'),
         };
@@ -104,12 +121,23 @@ export class FilterPanel {
         this.el.yearMax.addEventListener('change', changed);
         this.el.reset.addEventListener('click', () => this.reset());
 
-        // Auteur / mot-clé : validés par Entrée ou par le choix d'une suggestion.
-        for (const [input, add] of /** @type {const} */ ([[this.el.author, (/** @type {string} */ v) => this.addAuthor(v)], [this.el.keyword, (/** @type {string} */ v) => this.addKeyword(v)]])) {
-            input.addEventListener('change', () => { if (input.value.trim()) { add(input.value); input.value = ''; } });
+        for (const [input, add] of /** @type {const} */ ([
+            [this.el.author, (/** @type {string} */ v) => this.addAuthor(v)],
+            [this.el.keyword, (/** @type {string} */ v) => this.addKeyword(v)],
+            [this.el.venue, (/** @type {string} */ v) => this.addVenue(v)],
+        ])) {
+            const commit = () => { if (input.value.trim()) { const value = input.value; input.value = ''; add(value); } };
+            input.addEventListener('change', commit);
             input.addEventListener('keydown', e => {
-                if (e.key === 'Enter') { e.preventDefault(); if (input.value.trim()) { add(input.value); input.value = ''; } }
+                if (e.key === 'Enter') { e.preventDefault(); commit(); }
             });
+        }
+        for (const [input, key, mode] of /** @type {const} */ ([
+            [this.el.authorsAll, 'authorsMode', 'all'], [this.el.authorsAny, 'authorsMode', 'any'],
+            [this.el.keywordsAll, 'keywordsMode', 'all'], [this.el.keywordsAny, 'keywordsMode', 'any'],
+            [this.el.venuesAll, 'venuesMode', 'all'], [this.el.venuesAny, 'venuesMode', 'any'],
+        ])) {
+            input.addEventListener('change', () => { if (input.checked) { this.state[key] = mode; this.onChange(); } });
         }
     }
 
@@ -206,6 +234,15 @@ export class FilterPanel {
         const s = this.state;
         this.el.text.value = s.text;
         this.el.venue.value = s.venue;
+        this.el.modeAuthors.hidden = !s.authors.length;
+        this.el.modeKeywords.hidden = !s.keywords.length;
+        this.el.modeVenues.hidden = !s.venues.length;
+        this.el.authorsAll.checked = s.authorsMode === 'all';
+        this.el.authorsAny.checked = s.authorsMode === 'any';
+        this.el.keywordsAll.checked = s.keywordsMode === 'all';
+        this.el.keywordsAny.checked = s.keywordsMode === 'any';
+        this.el.venuesAll.checked = s.venuesMode === 'all';
+        this.el.venuesAny.checked = s.venuesMode === 'any';
         this.el.yearMin.value = s.yearMin?.toString() ?? '';
         this.el.yearMax.value = s.yearMax?.toString() ?? '';
 
@@ -220,6 +257,7 @@ export class FilterPanel {
 
         this.#renderChips(this.el.chipsAuthors, s.authors, t => { s.authors = s.authors.filter(x => x !== t); });
         this.#renderChips(this.el.chipsKeywords, s.keywords, t => { s.keywords = s.keywords.filter(x => x !== t); });
+        this.#renderChips(this.el.chipsVenues, s.venues.map(label => ({ label })), t => { s.venues = s.venues.filter(x => x !== t.label); });
     }
 
     /**
@@ -274,8 +312,11 @@ export class FilterPanel {
     }
 
     /** @param {string} venue */
-    setVenue(venue) {
-        this.state.venue = venue;
+    addVenue(venue) {
+        const label = venue.trim();
+        const norm = normText(label);
+        this.state.venue = '';
+        if (norm && !this.state.venues.some(v => normText(v) === norm)) this.state.venues.push(label);
         this.#syncUi();
         this.onChange();
     }

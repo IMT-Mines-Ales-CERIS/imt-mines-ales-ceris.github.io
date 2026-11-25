@@ -76,3 +76,7 @@ a:hover { color: var(--vermillion-light); }
 .chart-box { position: relative; height: 320px; }
 .graph-controls { background: #fff; }
 .graph-box { height: 620px; background: #fff; }
+.countries-map svg { display: block; width: 100%; height: auto; cursor: grab; touch-action: none; }
+.countries-map svg:active { cursor: grabbing; }
+.countries-map path:focus { outline: none; stroke: var(--primary-text); stroke-width: 1.5px; }
+.countries-gradient { display: inline-block; vertical-align: middle; width: 8rem; height: .75rem; background: linear-gradient(to right, #ffffcc, #800026); }

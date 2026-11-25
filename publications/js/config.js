@@ -20,7 +20,7 @@ export const HAL_PAGE_ROWS = 500;
 export const PAGE_SIZE = 20;
 
 export const HAL_FIELDS = [
-    'halId_s', 'uri_s', 'title_s', 'authFullName_s', 'keyword_s', 'abstract_s',
+    'halId_s', 'uri_s', 'title_s', 'authFullName_s', 'authFullNameIdFormPerson_fs', 'authIdHasStructure_fs', 'keyword_s', 'abstract_s',
     'producedDateY_i', 'conferenceTitle_s', 'journalTitle_s', 'docType_s',
 ].join(',');
 
